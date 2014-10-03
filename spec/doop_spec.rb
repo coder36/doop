@@ -2,85 +2,201 @@ require "spec_helper"
 
 describe "doop" do
 
-  let(:question) {
-    Question.new( 
-      <<-EOS
-  
-      root: {
-        age: {answer: 25},
-        address: { 
-          address_line_1: { answer: "21 The Grove" },
-          address_line_2: { answer: "Telford" },
-          address_line_3: {}
-        },
+  describe "question management" do
 
-        pets: {
-          pet__8: { answer: "Claude" },
-          pet__3: { answer: "Lucy" }
+    let(:question) {
+      Question.new( 
+        <<-EOS
+    
+        root: {
+          age: {_answer: 25, _answered: true},
+          address: { 
+            address_line_1: { _answer: "21 The Grove" },
+            address_line_2: { _answer: "Telford" },
+            address_line_3: {}
+          },
+
+          pets: {
+            pet__8: { _answer: "Claude" },
+            pet__3: { _answer: "Lucy" }
+          }
+
         }
 
-      }
+        EOS
+      )
+    }
+
+    it "is initialized with a YAML data structure" do
+    end
+
+    it "can be serilized" do
+      dump = question.dump
+      expect(dump).to include( "root" )
+      expect(dump).to eq( Question.new(dump).dump )
+    end
+
+    it "allows questions to be accessed like a file system" do
+      expect(question["/root/age/_answer"] ).to eq(25)
+      expect(question["/root/age"] ).not_to be_nil
+      expect(question["/root/address/address_line_1/_answer"] ).to eq("21 The Grove")
+      expect(question["/root/address/address_line_3/_answer"] ).to eq(:empty)
+    end
+
+    it "allows questions to be answered" do
+      question["/root/address/address_line_3/_answer"] = "Shropshire" 
+      expect(question["/root/address/address_line_3/_answer"] ).to eq("Shropshire")
+
+      yaml = <<-EOS
+
+        address_line_1: { _answer: "AAA" }
+        address_line_2: { _answer: "BBB" }
 
       EOS
-    )
-  }
 
-  it "is initialized with a YAML data structure" do
-  end
+      question["/root/address"] = YAML.load(yaml)
+      expect(question["/root/address/address_line_1/_answer"] ).to eq("AAA")
 
-  it "can be serilized" do
-    dump = question.dump
-    expect(dump).to include( "root" )
-    expect(dump).to eq( Question.new(dump).dump )
-  end
+    end
 
-  it "allows questions to be accessed like a file system" do
-    expect(question["/root/age/answer"] ).to eq(25)
-    expect(question["/root/age"] ).to eq({"answer"=>25})
-    expect(question["/root/address/address_line_1/answer"] ).to eq("21 The Grove")
-    expect(question["/root/address/address_line_3/answer"] ).to eq(nil)
-  end
+    it "allows questions to be added" do
+      question.add( "/root/address/address_line_4" )
+      question["/root/address/address_line_4/_answer"] = "XXX"
+      expect(question["/root/address/address_line_4/_answer"] ).to eq("XXX")
+    end
 
-  it "allows questions to be answered" do
-    question["/root/address/address_line_3/answer"] = "Shropshire" 
-    expect(question["/root/address/address_line_3/answer"] ).to eq("Shropshire")
+    it "allows questions to be removed" do
+      question.remove( "/root/address/address_line_1" )
+      expect(question["/root/address/address_line_1"] ).to eq(nil)
+    end
 
-    yaml = <<-EOS
+    it "allows questions to be moved" do
+      question.move( "/root/address/address_line_1", "/root/address/address_line_6" )
+      expect(question["/root/address/address_line_1"] ).to eq(nil)
+      expect(question["/root/address/address_line_6/_answer"] ).to eq("21 The Grove")
+    end
 
-      address_line_1: { answer: "AAA" }
-      address_line_2: { answer: "BBB" }
+    it "allows question to be renumbered in sequence" do
+      question.renumber( "/root/pets" )
+      expect(question["/root/pets/pet__1/_answer"] ).to eq("Lucy")
+      expect(question["/root/pets/pet__2/_answer"] ).to eq("Claude")
+    end
 
-    EOS
+    it "automatically adds meta data. Meta data starts with _" do
 
-    question["/root/address"] = YAML.load(yaml)
-    expect(question["/root/address/address_line_1/answer"] ).to eq("AAA")
+      expect(question["/root/pets/_answered"] ).not_to be_nil
+      expect(question["/root/pets/_open"] ).not_to be_nil
+      expect(question["/root/pets/_enabled"] ).not_to be_nil
+      expect(question["/root/pets/_answer"] ).not_to be_nil
 
-  end
+    end
 
-  it "allows questions to be added" do
-    question.add( "/root/address/address_line_4" )
-    question["/root/address/address_line_4/answer"] = "XXX"
-    expect(question["/root/address/address_line_4/answer"] ).to eq("XXX")
-  end
-
-  it "allows questions to be removed" do
-    question.remove( "/root/address/address_line_1" )
-    expect(question["/root/address/address_line_1"] ).to eq(nil)
-  end
-
-  it "allows questions to be moved" do
-    question.move( "/root/address/address_line_1", "/root/address/address_line_6" )
-    expect(question["/root/address/address_line_1"] ).to eq(nil)
-    expect(question["/root/address/address_line_6/answer"] ).to eq("21 The Grove")
-  end
-
-  it "allows question to be renumbered in sequence" do
-    question.renumber( "/root/pets" )
-    expect(question["/root/pets/pet__1/answer"] ).to eq("Lucy")
-    expect(question["/root/pets/pet__2/answer"] ).to eq("Claude")
   end
 
 
+  describe "navigation and answering" do
+
+
+    let(:question) {
+      Question.new( 
+        <<-EOS
+    
+        root: {
+          age: { _question: "How old are you?"},
+          address: { 
+            _question: "What is your address",
+            address_line__1: { _question: "Address Line 1"},
+            address_line__2: { _question: "Address Line 2"},
+            address_line__3: { _question: "Address Line 3"}
+          }
+        }
+
+        EOS
+      )
+    }
+
+    it "gets the next unaswered question" do
+      expect(question.currently_asked).to eq( "/root/age" )
+    end
+
+    it "allows question to be answered in order" do
+      expect(question.currently_asked).to eq( "/root/age" )
+      question.answer( 36 )
+      expect(question["/root/age/_answer"]).to eq( 36 )
+      expect(question.currently_asked).to eq( "/root/address/address_line__1" )
+      question.answer( "address1" )
+      expect(question.currently_asked).to eq( "/root/address/address_line__2" )
+      question.answer( "address2" )
+      expect(question.currently_asked).to eq( "/root/address/address_line__3" )
+      question.answer( "address3" )
+      expect(question.currently_asked).to eq( "/root/address" )
+      question.answer( "#{question['/root/address/address_line__1']},  #{question['/root/address/address_line__2']},  #{question['/root/address/address_line__3']}" )
+      expect(question.currently_asked).to eq( "/root" )
+      question.answer( "done" )
+      expect(question.currently_asked).to be_nil
+    end
+
+    it "allows questions to be disabled" do
+      question.disable("/root/address")
+      expect(question.currently_asked).to eq( "/root/age" )
+      question.answer( 36 )
+      expect(question.currently_asked).to eq( "/root" )
+    end
+
+    it "allows earlier questions to be changed" do
+      expect(question.currently_asked).to eq( "/root/age" )
+      question.answer( 36 )
+      expect(question["/root/age/_answer"]).to eq( 36 )
+      expect(question.currently_asked).to eq( "/root/address/address_line__1" )
+      question.answer( "address1" )
+      expect(question.currently_asked).to eq( "/root/address/address_line__2" )
+      question.answer( "address2" )
+      expect(question.currently_asked).to eq( "/root/address/address_line__3" )
+
+      question.change( "/root/age" )
+      expect(question.currently_asked).to eq( "/root/age" )
+      question.answer( 35 )
+      expect(question.currently_asked).to eq( "/root/address/address_line__3" )
+    end
+
+  end
+
+  describe "callbacks" do
+
+    let(:question) {
+      Question.new( 
+        <<-EOS
+    
+        root: {
+          address: { 
+            _question: "What is your address",
+            address_line__1: { _question: "Address Line 1"},
+            address_line__2: { _question: "Address Line 2"},
+            address_line__3: { _question: "Address Line 3"}
+          }
+        }
+
+        EOS
+      )
+    }
+
+    it "allow handling on the event of all sub questions being answered" do
+
+      expect(question.currently_asked).to eq( "/root/address/address_line__1" )
+      question.answer( "address1" )
+      expect(question.currently_asked).to eq( "/root/address/address_line__2" )
+      question.answer( "address2" )
+      expect(question.currently_asked).to eq( "/root/address/address_line__3" )
+      question.answer( "address3" )
+    end
+
+  end
+
+
+end
+
+
+def my_callbacks
 
 
 end
