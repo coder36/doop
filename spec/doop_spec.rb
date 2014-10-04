@@ -121,41 +121,41 @@ describe "doop" do
 
     it "allows question to be answered in order" do
       expect(question.currently_asked).to eq( "/root/age" )
-      question.answer( 36 )
+      question.answer( { "answer" => 36 } )
       expect(question["/root/age/_answer"]).to eq( 36 )
       expect(question.currently_asked).to eq( "/root/address/address_line__1" )
-      question.answer( "address1" )
+      question.answer( { "answer" => "address1" } )
       expect(question.currently_asked).to eq( "/root/address/address_line__2" )
-      question.answer( "address2" )
+      question.answer( {"answer" => "address2" } )
       expect(question.currently_asked).to eq( "/root/address/address_line__3" )
-      question.answer( "address3" )
+      question.answer( {"answer" => "address3" } )
       expect(question.currently_asked).to eq( "/root/address" )
-      question.answer( "#{question['/root/address/address_line__1']},  #{question['/root/address/address_line__2']},  #{question['/root/address/address_line__3']}" )
+      question.answer( { "answer" => "#{question['/root/address/address_line__1']},  #{question['/root/address/address_line__2']},  #{question['/root/address/address_line__3']}" } )
       expect(question.currently_asked).to eq( "/root" )
-      question.answer( "done" )
+      question.answer( { "answer" => "done" } )
       expect(question.currently_asked).to be_nil
     end
 
     it "allows questions to be disabled" do
       question.disable("/root/address")
       expect(question.currently_asked).to eq( "/root/age" )
-      question.answer( 36 )
+      question.answer( {"answer" => 36 } )
       expect(question.currently_asked).to eq( "/root" )
     end
 
     it "allows earlier questions to be changed" do
       expect(question.currently_asked).to eq( "/root/age" )
-      question.answer( 36 )
+      question.answer( {"answer" => 36} )
       expect(question["/root/age/_answer"]).to eq( 36 )
       expect(question.currently_asked).to eq( "/root/address/address_line__1" )
-      question.answer( "address1" )
+      question.answer( {"answer" => "address1" } )
       expect(question.currently_asked).to eq( "/root/address/address_line__2" )
-      question.answer( "address2" )
+      question.answer( {"answer" => "address2"} )
       expect(question.currently_asked).to eq( "/root/address/address_line__3" )
 
       question.change( "/root/age" )
       expect(question.currently_asked).to eq( "/root/age" )
-      question.answer( 35 )
+      question.answer({ "answer" => 35} )
       expect(question.currently_asked).to eq( "/root/address/address_line__3" )
     end
 
@@ -178,25 +178,41 @@ describe "doop" do
 
         EOS
       )
+
     }
 
-    it "allow handling on the event of all sub questions being answered" do
+    it "allows a callback when a question is answered.  This allows flows to be changed based on the answer" do
+
+      question.on_answer "/root/address/address_line__1" do |root, path, context|
+        question.enable( "/root/address/address_line__2", context[:button] == :ok )
+        root["_answer"] = "answered!"
+        root["_summary"] = "my summary"
+        root["_answered"] = true
+
+      end
 
       expect(question.currently_asked).to eq( "/root/address/address_line__1" )
-      question.answer( "address1" )
-      expect(question.currently_asked).to eq( "/root/address/address_line__2" )
-      question.answer( "address2" )
+      question.answer( {:button => :skip} )
       expect(question.currently_asked).to eq( "/root/address/address_line__3" )
-      question.answer( "address3" )
+      question.change( "/root/address/address_line__1" )
+      expect(question.currently_asked).to eq( "/root/address/address_line__1" )
+      question.answer( {:button => :ok} )
+      expect(question.currently_asked).to eq( "/root/address/address_line__2" )
+    end
+
+    it "allows callbacks based on a regex expression" do
+      question.on_answer "/root/address/address_line__(.*)" do |root, path, context|
+        root["_answer"] = "answered!"
+        root["_answered"] = true
+      end
+      expect(question.currently_asked).to eq( "/root/address/address_line__1" )
+      question.answer( {} )
+      expect(question["/root/address/address_line__1/_answer"]).to eq( "answered!" )
+      question.answer( {} )
+      expect(question["/root/address/address_line__2/_answer"]).to eq( "answered!" )
     end
 
   end
 
-
 end
 
-
-def my_callbacks
-
-
-end

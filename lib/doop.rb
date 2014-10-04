@@ -11,8 +11,21 @@ module Doop
 
     def initialize yaml
       @hash = YAML.load( yaml )
+      setup_handlers
       add_meta_data
       ask_next
+    end
+
+    def setup_handlers
+      @on_answer_handlers = {}
+      @on_answer_handlers["default"] = method(:default_on_answer)
+    end
+
+    def default_on_answer( root, path, context )
+      self[path + "/_answer"] = context["answer"]
+      self[path + "/_summary"] = context["summary"]
+      self[path + "/_answered"] = true
+      self[path + "/_open"] = false
     end
 
     def dump
@@ -95,6 +108,7 @@ module Doop
         root["_enabled"] = true if !root.has_key?("_enabled")
         root["_answered"] = false if !root.has_key?("_answered")
         root["_answer"] = :empty if !root.has_key?("_answer")
+        root["_on_answer_handler"] = "default" if !root.has_key?("_on_answer_handler")
       end
     end
 
@@ -124,10 +138,11 @@ module Doop
       nil
     end
 
-    def answer a
-      self[currently_asked + "/_answer"] = a
-      self[currently_asked + "/_answered"] = true
-      self[currently_asked + "/_open"] = false
+    def answer context
+      path = currently_asked
+      keys = @on_answer_handlers.keys.select { |k| path.match( "^#{k}$" ) != nil }
+      block = keys.empty? ? @on_answer_handlers["default"] : @on_answer_handlers[keys[0]]
+      block.call( self[path], path, context )
       ask_next
     end
 
@@ -136,8 +151,8 @@ module Doop
       ask_next
     end
 
-    def enable path
-      self[path + "/_enabled"] = true
+    def enable path, enable = true
+      self[path + "/_enabled"] = enable
       ask_next
     end
 
@@ -145,6 +160,12 @@ module Doop
       self[currently_asked + "/_open"] = false
       self[path + "/_open"] = true
     end
+
+    def on_answer(path, &block)
+      @on_answer_handlers[path] = block
+    end
+
+
 
   end
 end
