@@ -244,6 +244,17 @@ module Doop
       {}
     end
 
+
+    def each_visible_question 
+      max_nested = 1
+      each_question do |root,path|
+        if root["_enabled"]
+          max_nested = path.count("/") + 1 if root["_open"] == true
+          yield(root, path) if path.count("/") <= max_nested
+        end
+      end
+    end
+
   end
 
 end

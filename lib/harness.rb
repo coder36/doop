@@ -1,9 +1,11 @@
 require 'colorize'
+require 'pry'
 module Doop
   class Harness
     def initialize doop
       @doop = doop
       @res = {}
+      @questions = []
     end
 
     
@@ -11,13 +13,23 @@ module Doop
       while true
         draw_screen
         inp = input
-        @res = @doop.answer( { "answer"=>inp, "summary"=>inp.upcase } )
+        if inp != nil
+          @res = @doop.answer( { "answer"=>inp, "summary"=>inp.upcase } )
+        end
       end
     end
 
     def input 
       inp = STDIN.gets.chomp
-      exit(0) if inp == "QUIT"
+      exit(0) if inp == "quit"
+
+      m = inp.match( /change (\d)+/ )
+      if m != nil
+        #binding.pry
+        @doop.change( @questions[m[1].to_i - 1 ] )
+        return nil
+      end
+
       inp
     end
 
@@ -30,15 +42,19 @@ module Doop
         puts "Error: #{@res['error']}".red
 
       end
+      @questions = []
+      index = 1
 
-      @doop.each_question do |root,path|
+      #@doop.each_question do |root,path|
+      @doop.each_visible_question do |root,path|
+        @questions << path
         question = root[ "_question"]
         answer = root["_answer"] ==  nil ? "" : root["_answer"]
         summary = root["_summary"] == nil ? "" : root["_summary"]
         open = root["_open"]
         answered = root["_answered"]
 
-        n = nest(path.count("/"))
+        n = nest(path.count("/"), index)
         s = ""
 
         if open
@@ -50,6 +66,7 @@ module Doop
         elsif answered == true
           puts n + question.colorize(:blue).on_light_blue + " --> " + summary.colorize(:green)
         end
+        index += 1
 
       end
 
@@ -59,10 +76,16 @@ module Doop
 
     end
 
-    def nest depth
-      "  " * depth
+    def nest depth, index
+      sprintf( "%2d", index) + "  " * depth
 
     end
+
+    def index
+
+    end
+
+
 
 
     def clear_screen

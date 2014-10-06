@@ -44,6 +44,14 @@ doop.on_answer "/root/your_personal_details/date_of_birth" do |root,path,context
   doop.answer_path(path, context["answer"], dob.strftime( "%-d %B %Y" ) )
 end
 
+doop.on_all_nested_answer "/root/your_personal_details" do |root,path,context|
+  doop.answer_path(path, "provided" )
+end
+
+doop.on_all_nested_answer "/root/your_personal_details/name_and_address" do |root,path,context|
+  doop.answer_path(path, "provided" )
+end
+
 
 harness = Doop::Harness.new( doop )
 harness.start
