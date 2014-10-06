@@ -119,10 +119,12 @@ describe "doop" do
       expect(question.currently_asked).to eq( "/root/age" )
     end
 
+
     it "allows question to be answered in order" do
       expect(question.currently_asked).to eq( "/root/age" )
       question.answer( { "answer" => 36 } )
       expect(question["/root/age/_answer"]).to eq( 36 )
+      expect(question["/root/address/_open"]).to eq( true )
       expect(question.currently_asked).to eq( "/root/address/address_line__1" )
       question.answer( { "answer" => "address1" } )
       expect(question.currently_asked).to eq( "/root/address/address_line__2" )
@@ -161,7 +163,7 @@ describe "doop" do
 
   end
 
-  describe "callbacks" do
+  describe "on question answered callbacks" do
 
     let(:question) {
       Question.new( 
@@ -173,7 +175,12 @@ describe "doop" do
             address_line__1: { _question: "Address Line 1"},
             address_line__2: { _question: "Address Line 2"},
             address_line__3: { _question: "Address Line 3"}
+          },
+          age: {
+            _question: "How old are you?",
+            _on_answer_handler: "how_old_are_you"
           }
+
         }
 
         EOS
@@ -210,6 +217,96 @@ describe "doop" do
       expect(question["/root/address/address_line__1/_answer"]).to eq( "answered!" )
       question.answer( {} )
       expect(question["/root/address/address_line__2/_answer"]).to eq( "answered!" )
+    end
+
+    it "allows named handlers to be used" do
+      question.on_answer "how_old_are_you" do |root,path,context|
+        root["_answer"] = "answered!"
+        root["_answered"] = true
+      end
+      question.answer( {} )
+      question.answer( {} )
+      question.answer( {} )
+      question.answer( {} )
+      expect(question.currently_asked).to eq( "/root/age" )
+      question.answer( {} )
+      expect(question["/root/age/_answer"]).to eq( "answered!")
+    end
+
+  end
+
+  describe "on child question answered callbacks" do
+
+    let(:nested_question) {
+      Question.new( 
+        <<-EOS
+        root: {
+          a: {
+            b: {
+              c1: {},
+              c2: {}
+            }
+          }
+        }
+        EOS
+      )
+
+    }
+
+    let(:question) {
+      Question.new( 
+        <<-EOS
+    
+        root: {
+          address: { 
+            _question: "What is your address",
+            address_line__1: { _question: "Address Line 1"},
+            address_line__2: { _question: "Address Line 2"},
+            address_line__3: { _question: "Address Line 3"}
+          },
+          age: {
+            _question: "How old are you?",
+            _on_answer_handler: "how_old_are_you"
+          }
+
+        }
+
+        EOS
+      )
+
+    }
+
+    it "allows a callback when all nested questions have been answered" do
+      question.on_all_nested_answer "/root/address" do |root,path,context|
+        root["_answer"] = "answered!"
+        root["_answered"] = true
+      end
+
+      expect(question.currently_asked).to eq( "/root/address/address_line__1" )
+      question.answer( {} )
+      expect(question.currently_asked).to eq( "/root/address/address_line__2" )
+      question.answer( {} )
+      expect(question.currently_asked).to eq( "/root/address/address_line__3" )
+      question.answer( {} )
+      # /root/address should be answered by the callback
+      expect(question.currently_asked).to eq( "/root/age" )
+    end
+
+    it "recursively descends the question tree, making call backs" do
+      nested_question.on_all_nested_answer "/root/a/b" do |root,path,context|
+        root["_answer"] = "answered!"
+        root["_answered"] = true
+      end
+      nested_question.on_all_nested_answer "/root/a" do |root,path,context|
+        root["_answer"] = "answered!"
+        root["_answered"] = true
+      end
+
+      expect(nested_question.currently_asked).to eq( "/root/a/b/c1" )
+      nested_question.answer( {} )
+      expect(nested_question.currently_asked).to eq( "/root/a/b/c2" )
+      nested_question.answer( {} )
+      expect(nested_question.currently_asked).to eq( "/root" )
     end
 
   end
