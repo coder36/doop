@@ -39,18 +39,9 @@ end
 
 doop = Doop::Doop.new(yaml)
 doop.on_answer "/root/your_personal_details/date_of_birth" do |root,path,context|
-  a = context["answer"]
-  dob = parse_date( a, "%d %m %y" )
-  res = {}
-  if dob == nil
-    root["_answered"] = false
-    res["error"] = "Invalid date"
-  else
-    root["_answer"] = a
-    root["_answered"] = true
-    root["_summary"] = dob.strftime( "%-d %B &Y" )
-  end
-  res
+  dob = parse_date( context["answer"], "%d %m %y" )
+  next doop.unanswer_path(path).merge( {"error" => "Invalid date"} ) if dob == nil
+  doop.answer_path(path, context["answer"], dob.strftime( "%-d %B %Y" ) )
 end
 
 

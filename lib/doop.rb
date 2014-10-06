@@ -232,19 +232,16 @@ module Doop
       @on_all_nested_answer_handlers[path] = block
     end
 
-
-  end
-
-  class Path
-    def initialize doop, path
-      @path = path
-      @doop = path
-      @root = @doop[@path]
+    def answer_path path, a, summary = nil
+      self[path]["_answer"] = a
+      self[path]["_answered"] = true
+      self[path]["_summary"] = summary == nil ? a : summary
+      {}
     end
 
-    def answer a
-      @root["_answer"] = a
-      @root["_answered"] = true
+    def unanswer_path path
+      self[path]["_answered"] = false
+      {}
     end
 
   end
