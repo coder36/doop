@@ -1,0 +1,20 @@
+root: {
+  _question: "root",
+  your_personal_details: {
+    _question: "Enter Your Personal Deatils",
+    date_of_birth: { _question: "Enter your date of birth (DD MM YY)"},
+    phone_number: { _question: "Enter your phone number"},
+    name_and_address: {
+      _question: "Proide your name and address",
+      first_name: { _question: "Your firstnames"},
+      surname: { _question: "Your surname"},
+      address_1: { _question: "Address Line 1"},
+      address_2: { _question: "Address Line 2"},
+      address_3: { _question: "Address Line 3"},
+      postcode: { _question: "Postcode"}
+    },
+    nino: { _question: "Your National Insurance Number"  }
+
+  }
+
+}

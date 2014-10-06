@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.dirname("lib/doop")
+require 'doop'
+require 'date'
+
+def yaml
+  <<-EOS
+    root: {
+      _question: "root",
+      your_personal_details: {
+        _question: "Enter Your Personal Deatils",
+        date_of_birth: { _question: "Enter your date of birth (DD MM YY)"},
+        phone_number: { _question: "Enter your phone number"},
+        name_and_address: {
+          _question: "Proide your name and address",
+          first_name: { _question: "Your firstnames"},
+          surname: { _question: "Your surname"},
+          address_1: { _question: "Address Line 1"},
+          address_2: { _question: "Address Line 2"},
+          address_3: { _question: "Address Line 3"},
+          postcode: { _question: "Postcode"}
+        },
+        nino: { _question: "Your National Insurance Number"  }
+
+      }
+
+    }
+  EOS
+end
+
+def parse_date( date, format )
+  begin
+    Date.strptime( date, format )
+  rescue
+    nil
+  end
+end
+
+doop = Doop::Doop.new(yaml)
+doop.on_answer "/root/your_personal_details/date_of_birth" do |root,path,context|
+  a = context["answer"]
+  dob = parse_date( a, "%d %m %y" )
+  res = {}
+  if dob == nil
+    root["_answered"] = false
+    res["error"] = "Invalid date"
+  else
+    root["_answer"] = a
+    root["_answered"] = true
+    root["_summary"] = dob.strftime( "%-d %B &Y" )
+  end
+  res
+end
+
+
+harness = Doop::Harness.new( doop )
+harness.start

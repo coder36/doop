@@ -1,12 +1,12 @@
 require "doop/version"
 
 require "yaml"
+require 'harness'
 
 module Doop
 
 
-  class Question
-
+  class Doop
 
 
     def initialize yaml
@@ -33,6 +33,7 @@ module Doop
       self[path + "/_summary"] = context["summary"]
       self[path + "/_answered"] = true
       self[path + "/_open"] = false
+      {}
     end
 
     def dump
@@ -163,9 +164,13 @@ module Doop
       p.empty? ? nil : p
     end
 
+    def question
+      currently_asked
+    end
+
     def answer context
       path = currently_asked
-      get_handler(@on_answer_handlers, path, "_on_answer_handler").call( self[path], path, context )
+      res = get_handler(@on_answer_handlers, path, "_on_answer_handler").call( self[path], path, context )
 
       ask_next
       path = currently_asked
@@ -176,6 +181,7 @@ module Doop
           ask_next
         end
       end
+      res
     end
 
     def get_handler handlers, path, handler_elem
@@ -228,4 +234,19 @@ module Doop
 
 
   end
+
+  class Path
+    def initialize doop, path
+      @path = path
+      @doop = path
+      @root = @doop[@path]
+    end
+
+    def answer a
+      @root["_answer"] = a
+      @root["_answered"] = true
+    end
+
+  end
+
 end

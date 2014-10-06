@@ -5,7 +5,7 @@ describe "doop" do
   describe "question management" do
 
     let(:question) {
-      Question.new( 
+      Doop::Doop.new( 
         <<-EOS
     
         root: {
@@ -33,7 +33,7 @@ describe "doop" do
     it "can be serilized" do
       dump = question.dump
       expect(dump).to include( "root" )
-      expect(dump).to eq( Question.new(dump).dump )
+      expect(dump).to eq( Doop::Doop.new(dump).dump )
     end
 
     it "allows questions to be accessed like a file system" do
@@ -98,7 +98,7 @@ describe "doop" do
 
 
     let(:question) {
-      Question.new( 
+      Doop::Doop.new( 
         <<-EOS
     
         root: {
@@ -166,7 +166,7 @@ describe "doop" do
   describe "on question answered callbacks" do
 
     let(:question) {
-      Question.new( 
+      Doop::Doop.new( 
         <<-EOS
     
         root: {
@@ -238,7 +238,7 @@ describe "doop" do
   describe "on child question answered callbacks" do
 
     let(:nested_question) {
-      Question.new( 
+      Doop::Doop.new( 
         <<-EOS
         root: {
           a: {
@@ -254,7 +254,7 @@ describe "doop" do
     }
 
     let(:question) {
-      Question.new( 
+      Doop::Doop.new( 
         <<-EOS
     
         root: {
