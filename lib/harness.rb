@@ -16,7 +16,10 @@ module Doop
         if inp != nil
           @res = @doop.answer( { "answer"=>inp, "summary"=>inp.upcase } )
         end
+        break if @doop.all_answered( "/" )
       end
+
+      puts @doop.dump
     end
 
     def input 
@@ -25,7 +28,6 @@ module Doop
 
       m = inp.match( /change (\d)+/ )
       if m != nil
-        #binding.pry
         @doop.change( @questions[m[1].to_i - 1 ] )
         return nil
       end
@@ -45,7 +47,6 @@ module Doop
       @questions = []
       index = 1
 
-      #@doop.each_question do |root,path|
       @doop.each_visible_question do |root,path|
         @questions << path
         question = root[ "_question"]
@@ -73,20 +74,11 @@ module Doop
       puts "\n\n----\n"
       puts "#{@doop[current_question]["_question"]}"
 
-
     end
 
     def nest depth, index
       sprintf( "%2d", index) + "  " * depth
-
     end
-
-    def index
-
-    end
-
-
-
 
     def clear_screen
       print "\e[2J\e[f"

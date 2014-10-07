@@ -74,6 +74,7 @@ module Doop
 
     def add(path)
       self[path] = {}
+      add_meta_data
     end
 
     def remove(path)
@@ -92,9 +93,8 @@ module Doop
     def renumber( path )
       q = self[path]
       i = 1
-      q.keys.sort_by{|s| s.scan(/\d+/).map{|s| s.to_i}}.each do |elem|
-        next if elem.start_with?("_")
-        name = elem[/[^__]*/]
+      q.keys.select{|n| (n =~ /^(.*)__(\d)+/) != nil }. sort_by{|s| s.scan(/\d+/).map{|s| s.to_i}}.each do |elem|
+        name = elem.match( /(.*)__\d+/)[1]
         move( "#{path}/#{elem}", "#{path}/#{name}__#{i}" )
         i+=1
       end
@@ -159,7 +159,6 @@ module Doop
       p = ""
       each_question do |root, path|
         p = path if path.start_with?(p) && root["_open"] == true
-        #return path if root["_open"] == true
       end
       p.empty? ? nil : p
     end
@@ -249,18 +248,18 @@ module Doop
       open_paths = []
       each_question do |root,path|
         if root["_enabled"]
-          open_paths << path if root["_open"] == true
-          
+          open_paths << path if root["_open"]
           is_child = open_paths.select { |n| path.start_with?(n) && n.count('/')+1 == path.count('/') }.count > 0
-
           yield(root, path) if is_child || root["_open"]
-          #yield(root, path) if path.count("/") <= max_nested
         end
       end
     end
 
-    def is_child( parent_path, child_path )
-      child_path.start_with? parent_path && parent_path.count('/') + 1 == child_path.count('/')
+    def all_answered path
+      each_question(self[path], path) do |root, p|
+        return false if root["_answered"] == false && root["_enabled"]
+      end
+      true
     end
 
   end

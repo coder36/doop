@@ -1,8 +1,8 @@
 require "spec_helper"
 
-describe "doop" do
+describe "Doop" do
 
-  describe "question management" do
+  describe "structure management" do
 
     let(:question) {
       Doop::Doop.new( 
@@ -30,7 +30,7 @@ describe "doop" do
     it "is initialized with a YAML data structure" do
     end
 
-    it "can be serilized" do
+    it "can be serialized" do
       dump = question.dump
       expect(dump).to include( "root" )
       expect(dump).to eq( Doop::Doop.new(dump).dump )
@@ -159,6 +159,25 @@ describe "doop" do
       expect(question.currently_asked).to eq( "/root/age" )
       question.answer({ "answer" => 35} )
       expect(question.currently_asked).to eq( "/root/address/address_line__3" )
+    end
+
+    it "provides a mechanism to see if all questions are answered under a given path" do
+
+      expect(question.currently_asked).to eq( "/root/age" )
+      question.answer( {"answer" => 36} )
+      expect(question["/root/age/_answer"]).to eq( 36 )
+      expect(question.currently_asked).to eq( "/root/address/address_line__1" )
+      question.answer( {"answer" => "address1" } )
+      expect(question.currently_asked).to eq( "/root/address/address_line__2" )
+      question.answer( {"answer" => "address2"} )
+      expect(question.currently_asked).to eq( "/root/address/address_line__3" )
+      question.answer({ "answer" => "address3"} )
+      expect(question.all_answered("/root/address")).to eq(true)
+      expect(question.all_answered("/root")).to eq(false)
+      question.answer({ "answer" => "provided"} )
+      expect(question.all_answered("/root")).to eq(true)
+      question.answer({ "answer" => "provided"} )
+      expect(question.all_answered("/")).to eq(true)
     end
 
   end
@@ -309,6 +328,53 @@ describe "doop" do
       expect(nested_question.currently_asked).to eq( "/root" )
     end
 
+  end
+
+  describe "on the fly structure manipulation" do
+
+    let(:question) {
+      Doop::Doop.new( 
+        <<-EOS
+    
+        root: {
+          address: { 
+            _question: "What is your address",
+            address_line__1: { _question: "Address Line 1"},
+            address_line__2: { _question: "Address Line 2"},
+            address_line__3: { _question: "Address Line 3"}
+          },
+          age: {
+            _question: "How old are you?",
+            _on_answer_handler: "how_old_are_you"
+          }
+
+        }
+
+        EOS
+      )
+
+    }
+
+    it "allows questions to be removed and added in flight" do
+
+      expect(question.currently_asked).to eq( "/root/address/address_line__1" )
+      question.answer( {"answer"=>"address1"} )
+      question.answer( {"answer"=>"address2"} )
+      question.answer( {"answer"=>"address3"} )
+      expect(question.currently_asked).to eq( "/root/address" )
+
+      expect( question["/root/address/address_line__1/_answer"] ).to eq( "address1" ) 
+
+      question.remove( "/root/address/address_line__1" )
+      question.renumber( "/root/address" )
+      question.ask_next
+      expect( question["/root/address/address_line__1/_answer"] ).to eq( "address2" ) 
+
+      question.add( "/root/address/address_line__3" )
+      question.ask_next
+      expect(question.currently_asked).to eq( "/root/address/address_line__3" )
+
+    end
   end
 
 end
