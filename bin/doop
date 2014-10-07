@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-$:.unshift File.dirname("lib/doop")
+#$:.unshift File.dirname("lib/doop")
 require 'doop'
 require 'date'
 
