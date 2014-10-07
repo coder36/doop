@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["coder36"]
   spec.email         = ["markymiddleton@gmail.com"]
   spec.summary       = %q{Questionaire templating plugin}
-  spec.description   = %q{Manage the progressive disclosue of questions}
+  spec.description   = %q{Ruby plugin to manage the progressive disclosue of questions}
   spec.homepage      = ""
   spec.license       = "MIT"
 

@@ -1,9 +1,0 @@
-#!/usr/bin/env ruby
-$:.unshift File.dirname("lib/doop")
-require "doop"
-
-puts ARGV[0]
-yaml = File.read( ARGV[0] )
-puts yaml
-harness = Doop::Harness.new( new Doop::Doop.new(yaml) )
-harness.start
