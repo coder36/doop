@@ -13,7 +13,6 @@ module Doop
       @hash = YAML.load( yaml )
       setup_handlers
       add_meta_data
-      ask_next
     end
 
     def setup_handlers
@@ -129,8 +128,7 @@ module Doop
         root["_open"] = false if !root.has_key?("_open")
         root["_enabled"] = true if !root.has_key?("_enabled")
         root["_answered"] = false if !root.has_key?("_answered")
-        root["_answer"] = :empty if !root.has_key?("_answer")
-        #root["_on_answer_handler"] = "default" if !root.has_key?("_on_answer_handler")
+        root["_answer"] = nil if !root.has_key?("_answer")
       end
     end
 
@@ -197,7 +195,7 @@ module Doop
     def all_nested_answered path
       return true if path==nil
       each_question( self[path], path ) do |root,path| 
-        return false if root["_answered"] == false
+        return false if root["_answered"] == false || root["_open"] == true
       end
       true
     end

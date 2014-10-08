@@ -5,7 +5,7 @@ describe "Doop" do
   describe "structure management" do
 
     let(:question) {
-      Doop::Doop.new( 
+      q = Doop::Doop.new( 
         <<-EOS
     
         root: {
@@ -25,6 +25,8 @@ describe "Doop" do
 
         EOS
       )
+      q.ask_next
+      q
     }
 
     it "is initialized with a YAML data structure" do
@@ -40,7 +42,7 @@ describe "Doop" do
       expect(question["/root/age/_answer"] ).to eq(25)
       expect(question["/root/age"] ).not_to be_nil
       expect(question["/root/address/address_line_1/_answer"] ).to eq("21 The Grove")
-      expect(question["/root/address/address_line_3/_answer"] ).to eq(:empty)
+      expect(question["/root/address/address_line_3/_answer"] ).to eq(nil)
     end
 
     it "allows questions to be answered" do
@@ -87,7 +89,7 @@ describe "Doop" do
       expect(question["/root/pets/_answered"] ).not_to be_nil
       expect(question["/root/pets/_open"] ).not_to be_nil
       expect(question["/root/pets/_enabled"] ).not_to be_nil
-      expect(question["/root/pets/_answer"] ).not_to be_nil
+      expect(question["/root/pets/_answer"] ).to be_nil
 
     end
 
@@ -98,7 +100,7 @@ describe "Doop" do
 
 
     let(:question) {
-      Doop::Doop.new( 
+      q = Doop::Doop.new( 
         <<-EOS
     
         root: {
@@ -113,6 +115,9 @@ describe "Doop" do
 
         EOS
       )
+
+      q.ask_next
+      q
     }
 
     it "gets the next unaswered question" do
@@ -154,6 +159,14 @@ describe "Doop" do
       expect(question.currently_asked).to eq( "/root/address/address_line__2" )
       question.answer( {"answer" => "address2"} )
       expect(question.currently_asked).to eq( "/root/address/address_line__3" )
+      question.change( "/root/address/address_line__1" )
+      dump = question.dump
+      expect( question.dump ).to eq( Doop::Doop.new(dump).dump )
+
+
+      expect(question.currently_asked).to eq( "/root/address/address_line__1" )
+      question.answer( {"answer" => "address1"} )
+      expect(question.currently_asked).to eq( "/root/address/address_line__3" )
 
       question.change( "/root/age" )
       expect(question.currently_asked).to eq( "/root/age" )
@@ -185,7 +198,7 @@ describe "Doop" do
   describe "on question answered callbacks" do
 
     let(:question) {
-      Doop::Doop.new( 
+      q = Doop::Doop.new( 
         <<-EOS
     
         root: {
@@ -204,6 +217,8 @@ describe "Doop" do
 
         EOS
       )
+      q.ask_next
+      q
 
     }
 
@@ -257,7 +272,7 @@ describe "Doop" do
   describe "on child question answered callbacks" do
 
     let(:nested_question) {
-      Doop::Doop.new( 
+      q = Doop::Doop.new( 
         <<-EOS
         root: {
           a: {
@@ -269,11 +284,13 @@ describe "Doop" do
         }
         EOS
       )
+      q.ask_next
+      q
 
     }
 
     let(:question) {
-      Doop::Doop.new( 
+      q = Doop::Doop.new( 
         <<-EOS
     
         root: {
@@ -292,6 +309,8 @@ describe "Doop" do
 
         EOS
       )
+      q.ask_next
+      q
 
     }
 
@@ -333,7 +352,7 @@ describe "Doop" do
   describe "on the fly structure manipulation" do
 
     let(:question) {
-      Doop::Doop.new( 
+      q = Doop::Doop.new( 
         <<-EOS
     
         root: {
@@ -352,6 +371,8 @@ describe "Doop" do
 
         EOS
       )
+      q.ask_next
+      q
 
     }
 
