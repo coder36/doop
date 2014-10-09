@@ -2,6 +2,43 @@ require "spec_helper"
 
 describe "Doop" do
 
+  describe "automatic binding" do
+
+    let(:question) {
+      q = Doop::Doop.new( 
+        <<-EOS
+    
+        root: {
+          age: {},
+          address: { 
+            address_line_1: { _answer: "21 The Grove" },
+            address_line_2: { _answer: "Telford" },
+            address_line_3: {}
+          },
+
+          pets: {
+            pet__8: { _answer: "Claude" },
+            pet__3: { _answer: "Lucy" }
+          }
+
+        }
+
+        EOS
+      )
+      q.ask_next
+      q
+    }
+
+
+    it "attempts to bind anything starting with b_ to the answer" do
+      expect(question.currently_asked).to eq( "/root/age" )
+      question.answer( { "b_age"=>10 } )
+      expect( question["/root/age/_answer"]["age"] ).to eq(10)
+
+    end
+
+  end
+
   describe "structure management" do
 
     let(:question) {
@@ -224,7 +261,7 @@ describe "Doop" do
 
     it "allows a callback when a question is answered.  This allows flows to be changed based on the answer" do
 
-      question.on_answer "/root/address/address_line__1" do |root, path, context|
+      question.on_answer "/root/address/address_line__1" do |root, path, context, answer|
         question.enable( "/root/address/address_line__2", context[:button] == :ok )
         root["_answer"] = "answered!"
         root["_summary"] = "my summary"
@@ -254,17 +291,18 @@ describe "Doop" do
     end
 
     it "allows named handlers to be used" do
-      question.on_answer "how_old_are_you" do |root,path,context|
-        root["_answer"] = "answered!"
+      question.on_answer "how_old_are_you" do |root,path,context,answer|
         root["_answered"] = true
       end
       question.answer( {} )
       question.answer( {} )
-      question.answer( {} )
+      expect(question.currently_asked).to eq( "/root/address/address_line__3" )
+      question.answer( {"b_answer" => "test"} )
+      expect( question[ "/root/address/address_line__3/_answer" ] ).to eq( "test" )
       question.answer( {} )
       expect(question.currently_asked).to eq( "/root/age" )
-      question.answer( {} )
-      expect(question["/root/age/_answer"]).to eq( "answered!")
+      question.answer( {"b_age" => 30 } )
+      expect(question["/root/age/_answer/age"]).to eq( 30 )
     end
 
   end

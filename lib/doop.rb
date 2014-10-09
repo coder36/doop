@@ -27,9 +27,9 @@ module Doop
       # do nothing
     end
 
-    def default_on_answer( root, path, context )
-      self[path + "/_answer"] = context["answer"]
-      self[path + "/_summary"] = context["summary"]
+    def default_on_answer( root, path, context, answer )
+      self[path + "/_answer"] = context["answer"] if context["answer"] != nil
+      self[path + "/_summary"] = context["summary"] if context["summary"] != nil
       self[path + "/_answered"] = true
       self[path + "/_open"] = false
       {}
@@ -167,7 +167,11 @@ module Doop
 
     def answer context
       path = currently_asked
-      res = get_handler(@on_answer_handlers, path, "_on_answer_handler").call( self[path], path, context )
+      root = self[path]
+      root["_answered"] = false 
+      bind_params( root, context )
+      res = get_handler(@on_answer_handlers, path, "_on_answer_handler").call( root, path, context, root["_answer"] )
+      res = {} if ! res.is_a? Hash
 
       ask_next
       path = currently_asked
@@ -180,6 +184,20 @@ module Doop
       end
       res
     end
+
+    def bind_params root, context
+      a = {}
+      context.keys.each do |k|
+        if k == "b_answer"
+          root["_answer"] = context[k]
+        else
+          a[k[2..-1]] = context[k] if k.to_s.start_with?("b_")
+        end
+      end
+
+      root["_answer"] = a if !a.empty?
+    end
+
 
     def get_handler handlers, path, handler_elem
       handler = self[path][handler_elem]
@@ -234,6 +252,11 @@ module Doop
       self[path]["_answered"] = true
       self[path]["_summary"] = summary == nil ? a : summary
       {}
+    end
+
+    def answer_with root, hash
+      root["_answered"] = true
+      hash.keys.each { |k| root[k] = hash[k] }
     end
 
     def unanswer_path path
