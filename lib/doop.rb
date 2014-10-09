@@ -71,8 +71,8 @@ module Doop
       path.split("/").select {|n| !n.empty? }
     end
 
-    def add(path)
-      self[path] = {}
+    def add(path, hash={})
+      self[path] = hash
       add_meta_data
     end
 
