@@ -5,7 +5,8 @@ describe "Doop" do
   describe "automatic binding" do
 
     let(:question) {
-      q = Doop::Doop.new( 
+      q = Doop::Doop.new
+      q.yaml = ( 
         <<-EOS
     
         root: {
@@ -25,6 +26,7 @@ describe "Doop" do
 
         EOS
       )
+      q.init
       q.ask_next
       q
     }
@@ -42,7 +44,8 @@ describe "Doop" do
   describe "structure management" do
 
     let(:question) {
-      q = Doop::Doop.new( 
+      q = Doop::Doop.new
+      q.yaml = 
         <<-EOS
     
         root: {
@@ -61,7 +64,7 @@ describe "Doop" do
         }
 
         EOS
-      )
+      q.init
       q.ask_next
       q
     }
@@ -137,7 +140,8 @@ describe "Doop" do
 
 
     let(:question) {
-      q = Doop::Doop.new( 
+      q = Doop::Doop.new 
+      q.yaml=
         <<-EOS
     
         root: {
@@ -151,8 +155,7 @@ describe "Doop" do
         }
 
         EOS
-      )
-
+      q.init
       q.ask_next
       q
     }
@@ -235,7 +238,8 @@ describe "Doop" do
   describe "on question answered callbacks" do
 
     let(:question) {
-      q = Doop::Doop.new( 
+      q = Doop::Doop.new 
+      q.yaml=
         <<-EOS
     
         root: {
@@ -253,7 +257,7 @@ describe "Doop" do
         }
 
         EOS
-      )
+      q.init
       q.ask_next
       q
 
@@ -310,7 +314,9 @@ describe "Doop" do
   describe "on child question answered callbacks" do
 
     let(:nested_question) {
-      q = Doop::Doop.new( 
+      q = Doop::Doop.new 
+
+      q.yaml=
         <<-EOS
         root: {
           a: {
@@ -321,14 +327,15 @@ describe "Doop" do
           }
         }
         EOS
-      )
+      q.init
       q.ask_next
       q
 
     }
 
     let(:question) {
-      q = Doop::Doop.new( 
+      q = Doop::Doop.new 
+      q.yaml =
         <<-EOS
     
         root: {
@@ -346,7 +353,7 @@ describe "Doop" do
         }
 
         EOS
-      )
+      q.init
       q.ask_next
       q
 
@@ -390,7 +397,8 @@ describe "Doop" do
   describe "on the fly structure manipulation" do
 
     let(:question) {
-      q = Doop::Doop.new( 
+      q = Doop::Doop.new 
+      q.yaml = 
         <<-EOS
     
         root: {
@@ -408,7 +416,7 @@ describe "Doop" do
         }
 
         EOS
-      )
+      q.init
       q.ask_next
       q
 

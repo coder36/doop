@@ -8,11 +8,23 @@ module Doop
 
   class Doop
 
+    attr_accessor :yaml
 
-    def initialize yaml
-      @hash = YAML.load( yaml )
+    def initialize yaml=nil
+      if yaml != nil
+        @yaml = yaml
+        init
+      end
       setup_handlers
+    end
+
+    def init
+      @hash = YAML.load( yaml )
       add_meta_data
+    end
+
+    def set_yaml yaml
+      @yaml = yaml
     end
 
     def setup_handlers
