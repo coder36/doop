@@ -225,7 +225,9 @@ module Doop
     def all_nested_answered path
       return true if path==nil
       each_question( self[path], path ) do |root,path| 
-        return false if root["_answered"] == false || root["_open"] == true
+        if root["_enabled"] 
+          return false if root["_answered"] == false || root["_open"] == true
+        end
       end
       true
     end
