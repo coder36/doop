@@ -297,6 +297,14 @@ module Doop
       true
     end
 
+
+    def each_question_with_regex_filter regex
+      each_question do |question,path|
+        yield(question, path) if path.match( regex ) != nil
+      end
+    end
+
+
   end
 
 end
