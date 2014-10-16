@@ -1,0 +1,15 @@
+<%=form_tag( {action: "answer"}, :authenticity_token => true, :remote => true ) do %>
+  <div class="question_form">
+    <%=render "doop/navbar", :res => res, :doop => doop %> 
+    <h1><%=res[:page_title]%></h1>
+    <% content.call %>
+  </div>
+
+  <% if res[:debug_on] %>
+    <br/><br/><textarea cols="115" rows="20"><%= h(doop.dump)%></textarea>
+  <% end %>
+  <button id="nav_path" style="display: none;" name="nav_path"></button>
+  <button id="back_a_page" name="back_a_page" style="display: none;"></button>
+  <button id="change_answer_path" style="display: none;" name="change_answer_path"></button>
+  <input type="hidden" name="doop_data" value="<%=request["doop_data"]%>"/>
+<% end %>

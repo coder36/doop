@@ -2,8 +2,12 @@ require "doop/version"
 
 require "yaml"
 require 'harness'
+require 'doop_controller'
 
 module Doop
+
+  class Engine < ::Rails::Engine
+  end
 
 
   class Doop
