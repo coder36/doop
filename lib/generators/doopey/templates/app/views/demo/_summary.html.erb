@@ -1,0 +1,10 @@
+
+<%=question_form doop, res do %>
+  <%=question "/page/summary" do |root, answer| %>
+    <%=question "/page/summary/terms_and_conditions" do |root, answer| %>
+      <p>I have answered the questions to the best of my knowledge and agree to abide by the terms and conditions of this service.</p>
+      <button>I have read and understood the terms and conditions</button>
+    <% end %>
+
+  <% end %>
+<% end %>

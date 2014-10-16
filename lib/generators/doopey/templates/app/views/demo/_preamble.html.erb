@@ -1,0 +1,33 @@
+<%=question_form doop, res do %>
+  <%=question "/page/preamble" do |root, answer| %>
+
+    <%=question "/page/preamble/debug_on" do |root,answer| %>
+      <button name="b_answer" value="Yes">Yes, turn debugging on</button><br/>
+      <button name="b_answer" value="No">No, turn debugging off</button>
+    <% end %>
+
+    <%=question "/page/preamble/enrolled_before" do |root,answer| %>
+      <button name="b_answer" value="Yes">Yes, I've applied before</button><br/>
+      <button name="b_answer" value="No">No, I haven't applied before</button>
+    <% end %>
+
+    <%=question "/page/preamble/year_last_applied" do |root,answer| %>
+      <%=select_tag( "b_answer", "<option>2013</option><option>2012</option>".html_safe ) %>
+      <br/>
+      <button>Continue</button>
+    <% end %>
+
+    <%=question "/page/preamble/reason_for_applying" do |root,answer| %>
+      <p>Why are you applying this year?  Please be as specific as possible, and give examples</p>
+      <%=error res, :reason_for_applying_error  %>
+      <%=text_area_tag "b_answer", answer, rows: 10, cols: 100 %>
+      <br/>
+      <button>Continue</button>
+    <% end %>
+
+    <% when_answered "/page/preamble" do %>
+      <button>Continue and Save</button>
+    <% end %>
+  <% end %>
+
+<% end %>

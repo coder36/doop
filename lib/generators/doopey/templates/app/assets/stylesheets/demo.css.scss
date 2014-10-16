@@ -1,0 +1,188 @@
+// Place all the styles related to the demo controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "design-patterns/alpha-beta";
+@import "_conditionals";
+@import "_typography";
+@import "_colours";
+@import "_css3";
+@import "design-patterns/buttons";
+
+$question_completed_color: #D2E6DB;
+$question_completed_line_color: #84BA9D;
+$question_completed_font_color: $black;
+$question-fg-color: #014c73;
+
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.phase-banner {
+  @include phase-banner(alpha);
+}
+
+.outer-block {
+  @include outer-block;
+}
+
+.inner-block {
+  @include inner-block;
+  margin: 0 0 15px 0;
+}
+
+.info_box {
+  display: block;
+  margin: 15px 0 15px 0;
+  max-width: 100%;
+  min-height: 60px;
+  //outline: solid #a1bfd8 1px;
+  border: solid #d1e4f2 5px;
+  padding: 0 0 0 0;
+  background: #e1effa;
+  border-radius: 0.15em;
+  p {
+    margin: 0.75em 0.75em 0.75em 0.75em;
+  }
+
+  .info_img {
+    float: right;
+    margin: 10px 10px 10px 10px;
+  }
+}
+
+.question-open {
+  margin: 16px 0 16px 0;
+
+}
+
+.indent {
+  margin: 0 0 0 10px;
+}
+
+.question-closed {
+  background: $question_completed_color;
+  border-bottom: solid $question_completed_line_color 1px;
+  color: $question_completed_font_color;
+  display: table;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  margin: 0 0 0 0;
+  width: 100%;
+
+  .title {
+     padding: 0 0 0 0;
+     display: table-cell;
+     width: 80%;
+     vertical-align: middle;
+  }
+
+  .answer {
+    display: table-cell;
+    max-width: 20%;
+    text-align: right;
+    vertical-align: middle;
+    .button {
+      @include button($question-fg-color);
+      margin: 0 0 0 0;
+    }
+  }
+
+}
+
+.question_form {
+  @include core-16();
+  width: 100%;
+  h1 { 
+    @include bold-36();
+    border-width: 0 0 2px 0;
+    border-style: solid;
+    border-color: #d43783;
+    margin: 0 0 0 0;
+    padding: 5px 0 5px 0;
+  }
+
+  h2 {
+    @include bold-27();
+    padding: 0 0 10px 0;
+  }
+
+  input {
+    @include core-16();
+    width: 200px;
+  }
+
+}
+
+
+.textfield {
+
+  margin: 0 0 10px 0;
+
+  label {
+    display: block;
+    @include bold-16();
+    margin: 0 0 1px 0;
+  }
+
+}
+
+button {
+  @include button;
+  margin: 16px 0 0 0;
+
+}
+
+.button-secondary{
+  @include button($grey-3);
+}
+
+.button-warning {
+@include button($red);
+}
+
+.error {
+  margin: 0 0 10px 0;
+  span {
+    color: red;
+    border: 1px solid #B01117;
+    background-color: #FFF3CF;
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+
+  }
+}
+
+.navbar {
+
+  border-width: 0 0 1px 0;
+  border-style: dotted;
+  border-color: #bfc1c3;
+
+  ol {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+  }
+  li.todo {
+    display: inline;
+    margin: 0 30px 0 0;
+    @include core-16();
+  }
+
+  li.doing {
+    display: inline;
+    margin: 0 30px 0 0;
+    @include bold-16();
+  }
+
+  li.done {
+    display: inline;
+    margin: 0 30px 0 0;
+    @include core-16();
+  }
+}
+
