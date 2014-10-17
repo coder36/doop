@@ -1,7 +1,6 @@
 require "doop/version"
 
 require "yaml"
-require 'harness'
 require 'doop_controller'
 
 module Doop
