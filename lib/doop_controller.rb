@@ -1,4 +1,5 @@
 require 'yaml'
+require 'rails'
 
 module Doop
 

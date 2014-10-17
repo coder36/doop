@@ -1,0 +1,10 @@
+Description:
+    Creates a demo govuk questionaire.  It's fully functional and demonstrates the various integration points with the doop framework.
+    
+    Use this as a starting point for generating any govuk branded website.
+
+Example:
+    rails generate doopgovuk dvla
+    rails s
+
+    Naviagte to http://localhost:3000
