@@ -2,6 +2,10 @@
 
 A question framework for govuk sites, inspired by the great work GDS have done to standardize the cross government internet presence.
 
+Try out a demo... it's hosted on heroku so there may be a initial pause while heroku fires up the demo:
+
+## [Doopgovuk demo](http://blooming-wave-8670.herokuapp.com)
+
 # Quick start
 
 Assuming ruby, rails and nodejs is installed:
@@ -192,6 +196,7 @@ Don't forget to deal with database drivers.  In your Gemfile, you will need to u
 
 * Refactor -  make the code, simpler and read better
 * Doop-Rspec - it would be nice to have a DSL to drive answering questions.  This could be extended to capybara.
+* Responsive - on the whole the govuk frontend is responsive, fonts resize etc.  But there is still some work to be done.
 
 
 ## Contributing
