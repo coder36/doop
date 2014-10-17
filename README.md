@@ -2,12 +2,23 @@
 
 A question framework for govuk sites, inspired by the great work that GDS have done to standardize the cross government internet presence.
 
+# Quick start
 
-Demo
+    $ rails new govsite
+    $ cd govsite
+    $ echo "gem 'doop'" >> gemfile
+    $ rails generate doopgds demo
+    $ rails s
+
+Navigate to http://localhost:3000
+     
+
+The demo is also hosted on heroku.  It may take a few seconds for heroku to fire up the instance:
+
 
 
 ## Background
-A bit of background first.  Whilst working with the Student Loans company and GDS we discovered that the best way to get a student to fill a form in was to progressively
+Whilst working with the Student Loans company and GDS we discovered that the best way to get a student to fill a form in was to progressively
 ask questions, one after the other rather than as one big form.  User experience testing showed this was a far less intimidating experience, and they would more likely
 stick at it.  Furthermore, based on pevious answers, we  can choose which questions to ask.  This makes each questionaire effectively tailored to the individual student.
 
@@ -36,37 +47,111 @@ If your govuk site requires any kind of questionaire, doop is the answer.
 * Build on rails 4
 
 
-# Installation
-
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'doop'
-```
-
-And then execute:
-
-    $ bundle
-
-
 # Usage
 
-# Generator
+## Generator
 
 Make sure that the gemfile contains gem 'doop'.   Then run
 
     $ rails generate doopgds demo
-    $ rails s
 
 Navigate to http://localhost:3000 and you will see the demo questionaire.  
+    
+See the [demo rails controller](https://github.com/coder36/doop/blob/master/lib/generators/doopgovuk/templates/app/controllers/demo_controller.rb) to get a feel for the DSL.
 
-For the demo, the serialized questionaire is stored as a form parameter.  This is a nice approach as a general strategy since its completely stateless and as a result scalable.  
+
+## Yaml
+
+Doop is initiated with a Yaml data structure:
+
+    page: {
+      preamble: {
+        _page: "preamble",
+        _nav_name: "Apply Online",
+        enrolled_before: {
+          _question: "Have you enrolled for this service before ?"
+        },
+        year_last_applied: {
+          _question: "What year did you last apply?"
+        }
+      }
+    }
+
+Once initialized doop will add meta data to the structure.  Each question will get meta data.  So the above yaml will end up looking like:
+
+    page: {
+      _answered: false,
+      _answer: "",
+      _summary: "",
+      _enabled: true,
+      _open: false,
+      preamble: {
+        _answered: false,
+        _answer: "",
+        _summary: "",
+        _enabled: true,
+        _page: "preamble",
+        _nav_name: "Apply Online",
+        enrolled_before: {
+          _answered: false,
+          _answer: "",
+          _summary: "",
+          _enabled: true,
+          _question: "Have you enrolled for this service before ?"
+        },
+        year_last_applied: {
+          _answered: false,
+          _answer: "",
+          _summary: "",
+          _enabled: true,
+          _question: "What year did you last apply?"
+        }
+      }
+    }
+
+Meta data always starts with an _.  Doop uses the meta data to keep track of whats been answerd, what's currently being asked, and what questions are enabled.
+
+
+
+## Question order
+
+The questions will be asked in the order in which they appear in yaml.  So for above, the order of questions will be:
+
+1.  page/preamble/enrolled_before
+2.  page/preamble/year_last_applied
+3.  page/preamble
+4.  page
+
+The most nested question is asked first, then the next and so ending on the least nested question.  
+
+
+As the questions are answered, callbacks will invoked.
+
+
+## Callbacks
+
+Call backs are used to manipulate the yaml structure, to set _metadata etc.  In the example below, when /page/preamble/enrolled_before is answered, the summary will be set to the answer.
+
+```ruby
+on_answer "/page/preamble/enrolled_before"  do |question,path, params, answer|
+  answer_with( question, { "_summary" => answer } )
+end
+
+```
+
+On_answer call backs can be used to change the question flow.  The code below will enable or disable the year_last_applied question depending on whether the answer was Yes or No:
+
+```ruby
+on_answer "/page/preamble/enrolled_before"  do |question,path, params, answer|
+  answer_with( question, { "_summary" => answer } )
+  enable( "/page/preamble/year_last_applied", answer == "Yes" )
+end
+```
 
 
 # Notes
 
-## Perfoamnce
+## Performance
 
 For the demo, the serialized questionaire is stored as a form parameter.  This is a nice approach as a general strategy since its completely stateless and as a result scalable.  
 Its also very fast.  
@@ -101,7 +186,6 @@ Don't forget to deal with database drivers.  In your Gemfile, you will need to u
       gem 'sqlite3'
     end
 ```
-
 
 
 ## TODO
