@@ -1,6 +1,6 @@
 # Doop
 
-A question framework for govuk sites, inspired by the great work that GDS have done to standardize the cross government internet presence.
+A question framework for govuk sites, inspired by the great work GDS have done to standardize the cross government internet presence.
 
 # Quick start
 
@@ -12,10 +12,6 @@ A question framework for govuk sites, inspired by the great work that GDS have d
 
 Navigate to http://localhost:3000
      
-
-The demo is also hosted on heroku.  It may take a few seconds for heroku to fire up the instance:
-
-
 
 ## Background
 Whilst working with the Student Loans company and GDS we discovered that the best way to get a student to fill a form in was to progressively
@@ -44,7 +40,7 @@ If your govuk site requires any kind of questionaire, doop is the answer.
 * Stateless
 * Fast
 * Ajax call backs
-* Build on rails 4
+* Built on rails 4
 
 
 # Usage
@@ -196,7 +192,7 @@ Don't forget to deal with database drivers.  In your Gemfile, you will need to u
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/doop/fork )
+1. Fork it ( https://github.com/coder36/doop/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
