@@ -43,10 +43,12 @@ module Doop
     end
 
     def default_on_answer( root, path, context, answer )
+
       self[path + "/_answer"] = context["answer"] if context["answer"] != nil
       self[path + "/_summary"] = context["summary"] if context["summary"] != nil
       self[path + "/_answered"] = true
       self[path + "/_open"] = false
+      get_top["_last_answered"] = root["_path"]
       {}
     end
 
@@ -144,6 +146,7 @@ module Doop
         root["_enabled"] = true if !root.has_key?("_enabled")
         root["_answered"] = false if !root.has_key?("_answered")
         root["_answer"] = nil if !root.has_key?("_answer")
+        root["_path"] = path
       end
     end
 
@@ -246,6 +249,7 @@ module Doop
     end
 
     def change path
+      get_top["_last_answered"] = nil
       each_path_elem_reverse(currently_asked) do |p|
         self[p + "/_open"] = false
       end
@@ -268,12 +272,14 @@ module Doop
       self[path]["_answer"] = a
       self[path]["_answered"] = true
       self[path]["_summary"] = summary == nil ? a : summary
+      get_top["_last_answered"] = root["_path"]
       {}
     end
 
     def answer_with root, hash
       root["_answered"] = true
       hash.keys.each { |k| root[k] = hash[k] }
+      get_top["_last_answered"] = root["_path"]
     end
 
     def unanswer_path path
@@ -306,6 +312,16 @@ module Doop
         yield(question, path) if path.match( regex ) != nil
       end
     end
+
+    def get_top
+      @hash[@hash.first[0]]
+    end
+
+    def last_answered
+      get_top[ "_last_answered"]
+    end
+
+
 
 
   end

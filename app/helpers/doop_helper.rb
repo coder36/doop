@@ -48,4 +48,18 @@ module DoopHelper
     l.keys.sort.each { |k| block.call( l[k], k.to_i ) }
   end
 
+  def when_question options = {}, &block
+    doop = request[:doop]
+    if options.include? :last_answered
+      path = options[:last_answered]
+      if doop.last_answered == path 
+        block.call doop[path]["_answer"]
+      end
+    end
+  end
+
+  def tooltip &block
+    render( "doop/tooltip", :content => block )
+  end
+
 end

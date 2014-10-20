@@ -160,6 +160,16 @@ describe "Doop" do
       q
     }
 
+    it "remembers that last question to be answered" do
+      expect(question.currently_asked).to eq( "/root/age" )
+      question.answer( { "answer" => 36 } )
+      expect(question.last_answered).to eq( "/root/age" )
+      expect(question.currently_asked).to eq( "/root/address/address_line__1" )
+      question.answer( { "answer" => "address1" } )
+      expect(question.last_answered).to eq( "/root/address/address_line__1" )
+
+    end
+
     it "gets the next unaswered question" do
       expect(question.currently_asked).to eq( "/root/age" )
     end
