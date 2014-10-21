@@ -321,7 +321,10 @@ module Doop
       get_top[ "_last_answered"]
     end
 
-
+    def is_being_changed path
+      question = self[path]
+      question[ "_enabled" ] && question[ "_answered" ] && question[ "_open" ]
+    end
 
 
   end

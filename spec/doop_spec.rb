@@ -224,6 +224,15 @@ describe "Doop" do
       expect(question.currently_asked).to eq( "/root/address/address_line__3" )
     end
 
+    it "tells you if a question is being changed rather than just answered for the first time" do
+      expect(question.currently_asked).to eq( "/root/age" )
+      expect( question.is_being_changed("/root/age") ).to eq(false)
+      question.answer( {"answer" => 36} )
+      question.change( "/root/age" )
+      expect( question.is_being_changed("/root/age") ).to eq(true)
+
+    end
+
     it "provides a mechanism to see if all questions are answered under a given path" do
 
       expect(question.currently_asked).to eq( "/root/age" )

@@ -55,11 +55,21 @@ module DoopHelper
       if doop.last_answered == path 
         block.call doop[path]["_answer"]
       end
+    elsif options.include? :changed
+      path = options[:changed]
+      if doop.is_being_changed(path)
+        block.call doop[path]["_answer"]
+      end
     end
   end
 
   def tooltip &block
     render( "doop/tooltip", :content => block )
   end
+
+  def change_answer_tooltip &block
+    render( "doop/change_answer_tooltip", :content => block )
+  end
+
 
 end
