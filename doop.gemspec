@@ -6,13 +6,15 @@ require 'fileutils'
 include FileUtils
 
 # Copy files for rails doopgovuk template:
-dest = "lib/generators/doopgovuk/templates"
-cp "doop_demo/app/assets/stylesheets/demo.css.scss", "#{dest}/app/assets/stylesheets/demo.css.scss"
-cp "doop_demo/app/assets/javascripts/demo.js.coffee", "#{dest}/app/assets/javascripts/demo.js.coffee"
-cp "doop_demo/app/controllers/demo_controller.rb", "#{dest}/app/controllers/demo_controller.rb"
-cp "doop_demo/app/views/layouts/application.html.erb", "#{dest}/app/views/layouts/application.html.erb"
-cp_r "doop_demo/app/views/doop", "#{dest}/app/views"
-cp_r "doop_demo/app/views/demo", "#{dest}/app/views"
+if !Dir['doop_demo/*'].empty?
+  dest = "lib/generators/doopgovuk/templates"
+  cp "doop_demo/app/assets/stylesheets/demo.css.scss", "#{dest}/app/assets/stylesheets/demo.css.scss"
+  cp "doop_demo/app/assets/javascripts/demo.js.coffee", "#{dest}/app/assets/javascripts/demo.js.coffee"
+  cp "doop_demo/app/controllers/demo_controller.rb", "#{dest}/app/controllers/demo_controller.rb"
+  cp "doop_demo/app/views/layouts/application.html.erb", "#{dest}/app/views/layouts/application.html.erb"
+  cp_r "doop_demo/app/views/doop", "#{dest}/app/views"
+  cp_r "doop_demo/app/views/demo", "#{dest}/app/views"
+end
 
 Gem::Specification.new do |spec|
   spec.name          = "doop"
