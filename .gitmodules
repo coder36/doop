@@ -1,0 +1,3 @@
+[submodule "doop_demo"]
+	path = doop_demo
+	url = git://github.com/coder36/doop_demo.git

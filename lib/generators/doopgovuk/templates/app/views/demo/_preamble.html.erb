@@ -6,6 +6,20 @@
       <button name="b_answer" value="No">No, turn debugging off</button>
     <% end %>
 
+    <% when_question :last_answered => "/page/preamble/debug_on" do |answer|%>
+      <% if answer == "No" %>
+        <%=tooltip do %>
+          <p><strong>Are you sure ?</strong></p>
+          <p>By selecting no, you will not be able to see the yaml which doop generates behind the scenes</p>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% when_question :changed => "/page/preamble/enrolled_before" do |current_answer| %>
+      <%=change_answer_tooltip do %>
+        <p>If you change this answer, additional questions may be asked</p>
+      <% end %>
+    <% end %>
     <%=question "/page/preamble/enrolled_before" do |root,answer| %>
       <button name="b_answer" value="Yes">Yes, I've applied before</button><br/>
       <button name="b_answer" value="No">No, I haven't applied before</button>

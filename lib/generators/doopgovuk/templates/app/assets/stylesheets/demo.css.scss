@@ -157,32 +157,91 @@ button {
 
 .navbar {
 
-  border-width: 0 0 1px 0;
-  border-style: dotted;
-  border-color: #bfc1c3;
+  
+  @include media($min-width: 500px) {
 
-  ol {
-    list-style-type: none;
-    margin: 0;
-    padding: 10px;
-    text-align: center;
-  }
-  li.todo {
-    display: inline;
-    margin: 0 30px 0 0;
-    @include core-16();
+    border-width: 0 0 1px 0;
+    border-style: dotted;
+    border-color: #bfc1c3;
+
+    ol {
+      list-style-type: none;
+      margin: 0;
+      padding: 10px;
+      text-align: center;
+    }
+    li.todo {
+      display: inline;
+      margin: 0 30px 0 0;
+      @include core-16();
+    }
+
+    li.doing {
+      display: inline;
+      margin: 0 30px 0 0;
+      @include bold-16();
+    }
+
+    li.done {
+      display: inline;
+      margin: 0 30px 0 0;
+      @include core-16();
+    }
   }
 
-  li.doing {
-    display: inline;
-    margin: 0 30px 0 0;
-    @include bold-16();
-  }
+  @include media($max-width: 500px) {
 
-  li.done {
-    display: inline;
-    margin: 0 30px 0 0;
-    @include core-16();
+    ol {
+      list-style-type: none;
+      text-align: left;
+      padding: 0;
+    }
+    li.todo {
+      @include core-16();
+      padding: 6px 0 0 0;
+    }
+
+    li.doing {
+      @include bold-16();
+      padding: 6px 0 0 0;
+    }
+
+    li.done {
+      @include core-16();
+      padding: 6px 0 0 0;
+    }
   }
 }
+
+
+.tooltip {
+  border: 1px solid #666;
+  color: #000;
+  box-shadow: 0 0 7px #ccc;
+  border-radius: 0.75em;
+  background-color: #FFF3CE;
+  p {
+    margin: 10px;
+  }
+  @include media($max-width: 700px) {
+    width: 100%;
+    margin: 4px 0 20px 0;
+  }
+  @include media($min-width: 700px) {
+    width: 700px;
+    margin: 4px 0 20px auto;
+  }
+
+}
+
+.change_answer_tooltip {
+  border: 1px solid #F8C830;
+  background-color: #FFF4B5;
+  margin: 20px 0 0 0;
+  p {
+    margin: 10px;
+  }
+}
+
+
 

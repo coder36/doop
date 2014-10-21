@@ -2,7 +2,7 @@
 require 'doop'
 require 'yaml'
 
-class <%=name.capitalize%>Controller < ApplicationController
+class DemoController < ApplicationController
 
   delegate :index, :answer, to: :@doop_controller
   before_filter :setup_doop
