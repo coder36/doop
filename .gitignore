@@ -14,3 +14,4 @@
 mkmf.log
 *.swp
 doop_demo/
+*.gem
