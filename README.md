@@ -10,6 +10,10 @@ Try out a demo... it's hosted on heroku so there may be a initial pause while he
 
 Assuming ruby, rails and nodejs is installed:
 
+    $ sudo apt-get install qt4-dev-tools libqt4-dev libqt4-core libqt4-gui xvfb
+
+    These are needed to support the headless capybara test suite.
+
     $ rails new govsite
     $ cd govsite
     $ echo "gem 'doop'" >> Gemfile
@@ -17,12 +21,10 @@ Assuming ruby, rails and nodejs is installed:
     $ rails generate doopgovuk demo
     $ rails s
 
-Navigate to http://localhost:3000
+Navigate to http://localhost:3000/demo/index
 
 This is still in development, so if you want the latest, then add `gem 'doop', git: 'git://github.com/coder36/doop.git'` to your Gemfile.
 
-
-     
 
 ## Background
 Whilst working with the Student Loans company and GDS we discovered that the best way to get a student to fill a form in was to progressively ask questions, one after the other rather than as one big form.  User experience testing showed this was a far less intimidating experience, and they would more likely stick at it.  Furthermore, based on pevious answers, we  can choose which questions to ask.  This makes each questionaire effectively tailored to the individual student.
@@ -58,11 +60,12 @@ If your govuk site requires any kind of questionaire, doop is the answer.
 Make sure that the gemfile contains gem 'doop'.   Then run
 
     $ rails generate doopgovuk demo
+    $ rspec
+    $ rails s
 
-Navigate to http://localhost:3000 and you will see the demo questionaire.  
+Navigate to http://localhost:3000/demo/index and you will see the demo questionaire.  
     
 See the [demo rails controller](https://github.com/coder36/doop/blob/master/lib/generators/doopgovuk/templates/app/controllers/demo_controller.rb) to get a feel for the DSL.
-
 
 ## Yaml
 
