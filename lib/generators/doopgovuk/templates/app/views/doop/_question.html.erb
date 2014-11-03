@@ -1,7 +1,7 @@
 <% if root["_open"] %>
   <% if indent %><div class="indent"><% end %>
     <div class="question-open">
-      <h2><%=title != nil ? title : root["_question"]%></h2>
+      <h2 class="question_title"><%=title != nil ? title : root["_question"]%></h2>
       <% content.call(root, answer) %>
     </div>
   <% if indent %> </div"><% end %>
@@ -10,7 +10,7 @@
 <% if !root["_open"] && root["_answered"] %>
   <% if indent %><div class="indent"><% end %>
     <div class="question-closed">
-      <div class="title"><%=title != nil ? title : root["_question"]%></div>
+      <div class="title question_title"><%=title != nil ? title : root["_question"]%></div>
       <div class="answer">
         <a href="#" class="button" onclick="$('#change_answer_path').val('<%=path %>').click(); return false"><%=root['_summary']%></a>
       </div>

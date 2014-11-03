@@ -13,6 +13,7 @@ if !Dir['doop_demo/*'].empty?
   FileUtils.cp "doop_demo/app/views/layouts/application.html.erb", "#{dest}/app/views/layouts/application.html.erb"
   FileUtils.cp_r "doop_demo/app/views/doop", "#{dest}/app/views"
   FileUtils.cp_r "doop_demo/app/views/demo", "#{dest}/app/views"
+  FileUtils.cp_r "doop_demo/spec", "#{dest}"
 end
 
 Gem::Specification.new do |spec|

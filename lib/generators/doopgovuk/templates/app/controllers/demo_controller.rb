@@ -13,8 +13,11 @@ class DemoController < ApplicationController
       load_yaml do
         data = params["doop_data"] 
         if data != nil
-          crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
-          next crypt.decrypt_and_verify data
+          if Rails.env.development? || Rails.env.test?
+            next data
+          else
+            next ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base).decrypt_and_verify data if !Rails.env.development?
+          end
         end
 
         <<-EOS
@@ -66,9 +69,13 @@ class DemoController < ApplicationController
       end
 
       save_yaml do |yaml|
-        crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
-        data = crypt.encrypt_and_sign(yaml)
-        request["doop_data"] = data
+        if Rails.env.development? || Rails.env.test?
+          request["doop_data"] = yaml
+        else
+          crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
+          data = crypt.encrypt_and_sign(yaml)
+          request["doop_data"] = data
+        end
       end
 
       debug_on do 

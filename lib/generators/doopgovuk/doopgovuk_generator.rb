@@ -12,13 +12,31 @@ class DoopgovukGenerator < Rails::Generators::Base
     directory "app/views/demo", "app/views/#{name}"
     gsub_file "app/controllers/#{name}_controller.rb", /DemoController/, "#{name.capitalize}Controller"
 
+    copy_file "spec/rails_helper.rb"
+    copy_file "spec/spec_helper.rb"
+    copy_file "spec/features/demo_spec.rb", "spec/features/#{name}_spec.rb"
+    gsub_file "spec/features/#{name}_spec.rb", /\/demo\/harness/, "/#{name}/harness"
+    gsub_file "spec/features/#{name}_spec.rb", /\/demo\/index/, "/#{name}/index"
 
-    route "root '#{name}#index'"
     route "get '#{name}/index'"
+    route "post '#{name}/index'"
     route "post '#{name}/answer'"
+    route "get '#{name}/harness'"
 
     gem 'govuk_frontend_toolkit'
     gem 'govuk_template'
+
+    gem_group :development do
+      gem 'rspec-rails'
+      gem 'guard-rspec'
+      gem 'capybara'
+      gem 'pry'
+      gem 'pry-nav'
+      gem 'capybara-webkit'
+      gem 'headless'
+      gem 'capybara-screenshot'
+      gem 'selenium-webdriver'
+    end
 
     Bundler.with_clean_env do
       run "bundle install"
