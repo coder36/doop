@@ -23,7 +23,7 @@ module DoopHelper
     root = doop[path]
     s = ""
     if question_visible? path
-      s = render( "doop/question", :content => block, :root => root, :path => path, :answer => root["_answer"], :title => opts[:title], :indent => opts[:indent] )
+      s = render( "doop/question", :content => block, :root => root, :path => path, :answer => root["_answer"], :title => opts[:title], :indent => opts[:indent], :id => question_id(path) )
     end
     s
   end
@@ -53,12 +53,12 @@ module DoopHelper
     if options.include? :last_answered
       path = options[:last_answered]
       if doop.last_answered == path 
-        block.call doop[path]["_answer"]
+        block.call doop[path]["_answer"], question_id(path)
       end
     elsif options.include? :changed
       path = options[:changed]
       if doop.is_being_changed(path)
-        block.call doop[path]["_answer"]
+        block.call doop[path]["_answer"], question_id(path)
       end
     end
   end
@@ -67,8 +67,12 @@ module DoopHelper
     render( "doop/tooltip", :content => block )
   end
 
-  def change_answer_tooltip &block
-    render( "doop/change_answer_tooltip", :content => block )
+  def change_answer_tooltip id, &block
+    render( "doop/change_answer_tooltip", :content => block, :id => id )
+  end
+
+  def question_id path
+    path.split("/").last
   end
 
 

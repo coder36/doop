@@ -197,7 +197,7 @@ Don't forget to deal with database drivers.  In your Gemfile, you will need to u
 ## Creating and publishing doop gem
 
     git submodule init    <-- to load doop_demo
-    gem build
+    gem build doop.gemspec
     gem push doop-<version>.gem
 
 
