@@ -163,7 +163,7 @@ module Doop
           next
         end
 
-        q = path if path.start_with?(q) && root["_answered"] == false
+        q = path if path.start_with?("#{q}/") && root["_answered"] == false
       end
 
       each_path_elem( q )  { |n| self[n]["_open"] = true } 

@@ -2,6 +2,49 @@ require "spec_helper"
 
 describe "Doop" do
 
+  describe "answering in sequence" do
+
+    let(:question) {
+      q = Doop::Doop.new 
+      q.yaml=
+        <<-EOS
+    
+        pages: {
+          about_you: { 
+            dob: { _question: "What is your dob" }
+          },
+          about_your_partner: { 
+            dob: { _question: "What is your dob" }
+          }
+        }
+
+        EOS
+      q.init
+      q.ask_next
+      q
+    }
+
+    it "can handle questions with similar names" do
+      expect(question.currently_asked).to eq( "/pages/about_you/dob" )
+      question.answer( { "answer" => "aa"} )
+      expect(question.currently_asked).to eq( "/pages/about_you" )
+      question.answer( { "answer" => "bb"} )
+      expect(question.currently_asked).to eq( "/pages/about_your_partner/dob" )
+      question.answer( { "answer" => "cc"} )
+      expect(question.currently_asked).to eq( "/pages/about_your_partner" )
+      question.answer( { "answer" => "dd"} )
+      expect(question.currently_asked).to eq( "/pages" )
+      question.answer( { "answer" => "ee"} )
+
+      expect( question["/pages/about_you/dob/_answer"] ).to eq("aa")
+      expect( question["/pages/about_you/_answer"] ).to eq("bb")
+      expect( question["/pages/about_your_partner/dob/_answer"] ).to eq("cc")
+      expect( question["/pages/about_your_partner/_answer"] ).to eq("dd")
+      expect( question["/pages/_answer"] ).to eq("ee")
+    end
+
+  end
+
   describe "automatic binding" do
 
     let(:question) {
