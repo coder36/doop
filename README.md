@@ -2,9 +2,11 @@
 
 A question framework for govuk sites, inspired by the great work GDS have done to standardize the cross government internet presence.
 
+## [Doopgovuk demo](http://blooming-wave-8670.herokuapp.com)
+
 Try out a demo... it's hosted on heroku so there may be a initial pause while heroku fires up the demo:
 
-## [Doopgovuk demo](http://blooming-wave-8670.herokuapp.com)
+
 
 # Quick start
 
