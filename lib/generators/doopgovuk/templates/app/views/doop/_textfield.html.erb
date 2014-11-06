@@ -1,0 +1,14 @@
+<%
+    val = name=="answer" ? answer : answer[name]
+#  if answer.is_a?Hash
+#    val = (answer.is_a?Hash) ? answer[ name ] : answer
+#  end
+#  val = (answer.is_a?Hash) ? answer[ name ] : answer
+%>
+
+<div class="textfield">
+  <% if !label.nil? %>
+    <label for="<%=name%>"><%=label%></label>
+  <% end %>
+  <input id="<%=name%>" name="b_<%=name%>" type="text" value="<%=val%>"/><%=error res, "#{name}_error".to_sym %>
+</div>

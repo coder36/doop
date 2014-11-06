@@ -1,0 +1,56 @@
+<%=question_form doop, res do %>
+  <%=question "/page/before_you_begin" do |root, answer| %>
+
+    <h2>Doop technology demo</h2>
+    <p>Doop is a rails ruby gem which provides a generator to get you quickly started converting govuk paper forms into online applications.  
+
+    This is a demo of how a <strong><a href="https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/359765/ch2-flat.pdf">Child Benefit paper application form</a></strong> could be realized as an online questionnaire, where questions are progresively
+    asked and question flows altered based on responses. </p> 
+
+    <button>Start the demo</button>
+    <br/>
+    <br/>
+    <br/>
+    
+    <h2>The code</h2>
+    <p>As you progress through the questionnaire, you can follow along in the code:<br/><br/>
+    <%
+      view_url = "https://github.com/coder36/doop/tree/master/lib/generators/doopgovuk/templates/app/views/demo"
+      cont_url = "https://github.com/coder36/doop/tree/master/lib/generators/doopgovuk/templates/app/controllers"
+      rspec_url = "https://github.com/coder36/doop/blob/master/lib/generators/doopgovuk/templates/spec/features/demo_spec.rb"
+    %>
+
+    <strong><a href='<%="#{cont_url}/demo_controller.rb"%>'>demo_controller.rb</a></strong><br/>
+    <strong><a href='<%="#{view_url}/_before_you_begin.html.erb"%>'>_before_you_begin.html.erb</a></strong><br/>
+    <strong><a href='<%="#{view_url}/_preamble.html.erb"%>'>_preamble.html.erb</a></strong><br/>
+    <strong><a href='<%="#{view_url}/_about_you.html.erb"%>'>_about_you.html.erb</a></strong><br/>
+    <strong><a href='<%="#{view_url}/_children.html.erb"%>'>_children.html.erb</a></strong><br/>
+    <strong><a href='<%="#{view_url}/_declaration.html.erb"%>'>_declaration.html.erb</a></strong><br/>
+    <strong><a href='<%="#{rspec_url}"%>'>demo_spec.rb</a></strong><br/>
+    </p>
+
+
+    <h3>The YAML</h3>
+    <p>The question structure is described using YAML.  As questions are answered, the YAML structure is updated to reflect the current state
+    of the questionnaire.  The YAML structure is then sent back to the browser and stored in a hidden field.  When the next question is answered
+    the submission include the hidden YAML, which is then updated to reflect the next answer... and so on.  In production, the hidden field is 
+    encrypted and signed, to guarentee its authenticity.  Since the data is stored in the users browser, the application can be considered stateless
+    , which makes it very scalable.</p>
+
+    <h3>View the saved YAML</h3>
+    <p>For the demo, at any point you can view the current YAML by hitting <strong>Ctrl-Y</strong></p>
+
+    <h3>Testing with Rspec</h3>
+    <p>Doop defines a set of Rspec extensions, to make acceptance testing more natural.  See <strong><a href='<%="#{rspec_url}"%>'>demo_spec.rb</a></strong> for the acceptance tests covering
+    the demo.</p>
+
+    <h3>Test Harness</h3>
+    <p>The demo includes a <strong><a href="harness">test harness</a></strong>, which allows you to directly render a YAML config.  The quickest way
+    to try this put is to hit Ctrl-Y, copy the YAML, then paste it into the test harness.</p>
+
+
+
+
+  <% end %>
+
+<% end %>

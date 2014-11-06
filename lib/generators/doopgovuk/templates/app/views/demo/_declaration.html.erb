@@ -1,0 +1,32 @@
+<%=question_form doop, res do %>
+  <%=question "/page/declaration" do |root, answer| %>
+
+  <div class="summary_box">
+
+    <%
+        name = doop["/page/about_you/your_name/_summary"]
+        address = doop["/page/about_you/your_address/_summary"]
+    %>
+
+    <p>I, <strong><%=name%></strong> of <strong><%=address%></strong>, am applying for child benefit for:</p>
+
+    <% 
+    list "/page/children/child__(\\d+)" do |path, index| 
+      child = doop["#{path}/name/_summary"]
+      dob = doop["#{path}/dob/_summary"]
+    %>
+      <li><strong><%=child%></strong>, born <strong><%=dob%></strong></li>
+    <% end %>
+
+    <br/>
+
+    <p><strong>I declare that the information I have provided is correct and complete</strong>.  If I give information which I know is not correct or complete, you may take action against me.</p>
+
+    <p><strong>I will send the birth certificate(s) or other documents that you need with this form.</strong>  If you don't send the documents we need with this application, a decision on your claim will be delayed.  Do not send photocopies</p>
+  </div>
+
+
+  <button>I declare that the information I have provided is correct and complete.  Submit my application.</button>
+
+  <% end %>
+<% end %>

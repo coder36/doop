@@ -48,6 +48,10 @@ $question-fg-color: #014c73;
     margin: 0.75em 0.75em 0.75em 0.75em;
   }
 
+  li {
+    margin: 0.75em 0.75em 0.75em 0.75em;
+  }
+
   .info_img {
     float: right;
     margin: 10px 10px 10px 10px;
@@ -75,16 +79,14 @@ $question-fg-color: #014c73;
   .title {
      padding: 0 0 0 0;
      display: table-cell;
-     width: 80%;
      vertical-align: middle;
   }
 
   .answer {
     display: table-cell;
-    max-width: 20%;
     text-align: right;
     vertical-align: middle;
-    .button {
+    .button-change-answer {
       @include button($question-fg-color);
       margin: 0 0 0 0;
     }
@@ -144,15 +146,13 @@ button {
 }
 
 .error {
-  margin: 0 0 10px 0;
-  span {
     color: red;
     border: 1px solid #B01117;
     background-color: #FFF3CF;
-    padding: 5px 5px 5px 5px;
+    padding: 2px 5px 2px 5px;
     border-radius: 5px;
-
-  }
+    margin: 10px 0 10px 0;
+    width: auto;
 }
 
 .navbar {
@@ -234,6 +234,18 @@ button {
 
 }
 
+.summary_box {
+  display: block;
+  margin: 15px 0 15px 0;
+  max-width: 100%;
+  min-height: 60px;
+  border: solid #d1e4f2 5px;
+  box-shadow: 0 0 7px #ccc;
+  padding: 0.75em 0.75em 0.75em 0.75em;
+  background: #e1effa;
+  border-radius: 0.15em;
+}
+
 .change_answer_tooltip {
   border: 1px solid #F8C830;
   background-color: #FFF4B5;
@@ -244,4 +256,34 @@ button {
 }
 
 
+.before_you_begin {
+
+  ul { 
+    padding: 0;
+    margin: 0;
+
+  }
+
+  li {
+    padding: 32px 0 32px 88px;
+    border-bottom: 1px solid #ccc;
+    list-style-type: none;
+  }
+
+  li.nino {
+    background: url(image_path('nino-icon.png')) left center no-repeat;
+  }
+
+  li.passport {
+    background: url(image_path('passport-icon.png')) left center no-repeat;
+  }
+  li.time {
+    background: url(image_path('time-icon.png')) left center no-repeat;
+  }
+
+}
+
+select {
+    @include core-16();
+}
 

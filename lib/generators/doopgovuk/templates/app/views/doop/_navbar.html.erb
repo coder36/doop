@@ -6,13 +6,14 @@
     page_path = res[:page_path]
     pages.each do |p|
       nav_name = doop[p]["_nav_name"]
+      id = doop[p]["_page"]
 
       if p == page_path %>
-        <li class="doing"><%="#{i}. #{nav_name}"%></li>
+    <li class="doing" id="<%=id%>-nav"><%="#{i}. #{nav_name}"%></li>
       <% elsif doop[p]["_answered"] %>
-        <li class="done"><a href="#" onclick="$('#nav_path').val('<%=p %>').click(); return false"><%="#{i}. #{nav_name}" %></a></li>
+        <li class="done"><a href="#" id="<%=id%>-nav" onclick="$('#nav_path').val('<%=p %>').click(); return false"><%="#{i}. #{nav_name}" %></a></li>
       <% else %>
-        <li class="todo"><%="#{i}. #{nav_name}"%></li>
+        <li class="todo" ><%="#{i}. #{nav_name}"%></li>
      <%
       end
       i +=1

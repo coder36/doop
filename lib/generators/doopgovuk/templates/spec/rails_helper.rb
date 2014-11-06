@@ -8,6 +8,8 @@ require 'capybara/rspec'
 require 'capybara-webkit'
 require 'headless'
 require 'capybara-screenshot/rspec'
+require 'doop-rspec'
+
 
 
 Capybara.javascript_driver = :webkit
@@ -44,6 +46,8 @@ RSpec.configure do |config|
     @headless.destroy
   end
 
+  config.filter_run_excluding :broken => true
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   #config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -66,77 +70,4 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
   #config.infer_spec_type_from_file_location!
-end
-
-RSpec::Matchers.define :be_asked do 
-  match do |q_title|
-    page.has_css?( '.question-open h2', :text => q_title )
-  end
-
-  failure_message do |q_title|
-    actual = page.all( '.question-open h2', ).last.text
-    "Expected question to be asked: #{q_title}, but was asked #{actual}"
-  end
-
-end
-
-RSpec::Matchers.define :be_enabled do 
-  match do |q_title|
-    page.has_css?( '.question_title', :text => q_title )
-  end
-end
-
-RSpec::Matchers.define :be_disabled do 
-  match do |q_title|
-    page.has_no_css?( '.question_title', :text => q_title )
-  end
-end
-
-def question text
-  text
-end
-
-def change_question q_title, &block
-  @q_title = q_title
-  page.find( '.question-closed div.title', :text => q_title ).find(:xpath, "..").find( 'div.answer a' ).click
-  expect( question q_title ).to be_asked
-  yield block
-end
-
-def answer_question q_title, &block
-  @q_title = q_title
-  expect( question q_title ).to be_asked
-  yield block
-  page.find( '.question-closed div.title', :text => q_title )
-end
-
-def rollup_text
-  page.find( '.question-closed div.title', :text => @q_title ).find(:xpath, '..').find( 'div.answer').text
-end
-
-def tooltip_text
-  page.find( '.tooltip' ).text
-end
-
-def change_answer_tooltip_text
-  page.find( '.change_answer_tooltip' ).text
-end
-
-def wait_for_page p_title
-  page.find_by_id( "page_title", :text=>p_title)
-end
-
-def page_title
-  page.find_by_id( "page_title").text
-end
-
-def b_fill_in options = {}
-  options.keys.each do |key|
-    page.fill_in( "b_#{key}", :with => options[key] )
-  end
-end
-
-def change_page page_name
-  page.find_link( page_name ).click
-  wait_for_page page_name
 end

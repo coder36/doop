@@ -1,0 +1,84 @@
+<%=question_form doop, res do %>
+  <%=question "/page/about_you" do |root, answer| %>
+
+    <%=question "/page/about_you/your_name" do |root,answer| %>
+      <%=doop_textfield "title", answer, res, :label => "Title (eg. Mrs, Miss, Ms, Mr or Dr)" %>
+      <%=doop_textfield "firstname", answer, res, :label => "Firstname" %>
+      <%=doop_textfield "middlenames", answer, res, :label => "Middlename(s)" %>
+      <%=doop_textfield "surname", answer, res, :label => "Surname or family name" %>
+      <br/>
+      <button>Continue</button><br/>
+    <% end %>
+
+    <%=question "/page/about_you/known_by_other_name" do |root,answer| %>
+      <p>If you had a different maiden name, please answer Yes.</p>
+      <button name="b_answer" value="Yes">Yes, I have been known by another surname</button><br/>
+      <button name="b_answer" value="No">No, I have not been known by another surname</button>
+    <% end %>
+
+    <%=question "/page/about_you/previous_name" do |root,answer| %>
+      <%=doop_textfield "answer", answer, res %>
+      <button>Continue</button>
+    <% end %>
+
+    <%=question "/page/about_you/dob" do |root,answer| %>
+      <p>Please provide this in the format dd/mm/yyyy eg. 25/02/1977</p>
+      <%=doop_textfield "answer", answer, res %>
+      <button>Continue</button>
+    <% end %>
+
+    <%=question "/page/about_you/your_address" do |root,answer| %>
+
+      <%=doop_textfield "address1", answer, res, :label => "Address" %>
+      <%=doop_textfield "address2", answer, res %>
+      <%=doop_textfield "address3", answer, res %>
+      <%=doop_textfield "postcode", answer, res, :label => "Postcode" %>
+      <button>Continue</button>
+
+    <% end %>
+
+    <%=question "/page/about_you/lived_at_address_for_more_than_12_months" do |root,answer| %>
+      <button name="b_answer" value="Yes">Yes, I've lived at this address for more than 12 months</button><br/>
+      <button name="b_answer" value="No">No, I have not lived at this address for more than 12 months</button>
+    <% end %>
+
+    <%=question "/page/about_you/last_address" do |root,answer| %>
+      <%=doop_textfield "address1", answer, res, :label => "Address" %>
+      <%=doop_textfield "address2", answer, res %>
+      <%=doop_textfield "address3", answer, res %>
+      <%=doop_textfield "postcode", answer, res, :label => "Postcode" %>
+      <button>Continue</button>
+
+    <% end %>
+
+    <%=question "/page/about_you/your_phone_numbers" do |root,answer| %>
+
+      <div class="textfield">
+      <%=doop_textfield "daytime", answer, res, :label => "Daytime phone number" %>
+      <%=doop_textfield "evening", answer, res, :label => "Evening phone number" %>
+      <button>Continue</button>
+    <% end %>
+
+    <%=question "/page/about_you/have_nino" do |root,answer| %>
+      <%=info_box do %>
+        <p>This will be on:</p>
+        <li>a P60 certificate from your employer</li>
+        <li>a PAYE Coding Notice or a letter from us</li>
+        <li>a payslip from your employer</li>
+        <li>any letter from the Department for Work and Pensions or Jobcentre Plus</li>
+      <% end %>
+      <button name="b_answer" value="Yes">Yes, I have a national insurance number</button><br/>
+      <button name="b_answer" value="No">No, I don't have a national insurance number</button>
+    <% end %>
+
+    <%=question "/page/about_you/nino" do |root,answer| %>
+      <%=doop_textfield "answer", answer, res, :label => "Example of a National Insurance number is 00123456A" %>
+      <button>Continue</button>
+    <% end %>
+
+    <% when_answered "/page/about_you" do %>
+      <button>Continue and Save</button>
+    <% end %>
+  <% end %>
+
+<% end %>

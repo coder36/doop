@@ -25,6 +25,7 @@ class DoopgovukGenerator < Rails::Generators::Base
 
     gem 'govuk_frontend_toolkit'
     gem 'govuk_template'
+    gem 'jquery-ui-rails'
 
     gem_group :development do
       gem 'rspec-rails'

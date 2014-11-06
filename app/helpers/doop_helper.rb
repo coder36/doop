@@ -75,5 +75,8 @@ module DoopHelper
     path.split("/").last
   end
 
+  def doop_textfield name, answer, res, options = {}
+    s = render "doop/textfield", :answer => answer, :name => name, :res => res, :label => options[:label]
+  end
 
 end

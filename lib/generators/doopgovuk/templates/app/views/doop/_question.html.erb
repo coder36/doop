@@ -1,18 +1,22 @@
 <% if root["_open"] %>
   <% if indent %><div class="indent"><% end %>
-    <div class="question-open">
-      <h2 class="question_title"><%=title != nil ? title : root["_question"]%></h2>
-      <% content.call(root, answer) %>
+    <div id="<%=id%>">
+      <div class="question-open" id="<%=id%>-open">
+        <h2 class="question_title"><%=title != nil ? title : root["_question"]%></h2>
+        <% content.call(root, answer) %>
+      </div>
     </div>
   <% if indent %> </div"><% end %>
 <% end %>
 
 <% if !root["_open"] && root["_answered"] %>
   <% if indent %><div class="indent"><% end %>
-    <div class="question-closed">
-      <div class="title question_title"><%=title != nil ? title : root["_question"]%></div>
-      <div class="answer">
-        <a href="#" class="button" onclick="$('#change_answer_path').val('<%=path %>').click(); return false"><%=root['_summary']%></a>
+    <div id="<%=id%>">
+      <div class="question-closed" id="<%=id%>-closed">
+        <div class="title question_title" id="<%=id%>-rollup"><%=title != nil ? title : root["_question"]%></div>
+        <div class="answer">
+          <button id="<%=id%>-change" class="button-change-answer" value="<%=path%>" name="change_answer_path"><%=root['_summary']%></button>
+        </div>
       </div>
     </div>
   <% if indent %> </div"><% end %>
