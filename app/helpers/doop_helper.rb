@@ -63,8 +63,8 @@ module DoopHelper
     end
   end
 
-  def tooltip &block
-    render( "doop/tooltip", :content => block )
+  def tooltip id, &block
+    render( "doop/tooltip", :content => block, :id => id )
   end
 
   def change_answer_tooltip id, &block

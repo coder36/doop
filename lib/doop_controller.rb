@@ -24,9 +24,9 @@ module Doop
       back_val = @controller.params["back_a_page"]
       nav_path = @controller.params["nav_path"]
       change_answer_path = @controller.params["change_answer_path"]
-      return back if back_val != nil && !back_val.empty?
-      return change_page nav_path if nav_path != nil && !nav_path.empty?
-      return change change_answer_path if change_answer_path != nil && !change_answer_path.empty?
+      return back if back_val != nil 
+      return change_page nav_path if nav_path != nil
+      return change change_answer_path if change_answer_path != nil
 
       render_page in_doop { |doop| doop.answer( @controller.params ) }
     end
@@ -79,6 +79,17 @@ module Doop
     end
 
     def render_page res = {}
+
+      redirect_url = res[:redirect]
+
+      if ! redirect_url.nil?
+        @controller.respond_to do |format|
+          format.js { @controller.render :js => "window.location.href='#{redirect_url}'" }
+          format.html { redirect_to redirect_url }
+        end
+        return
+      end
+
       res[:page] = get_page
       res[:page_path] = get_page_path
       res[:page_title] = @doop[res[:page_path]]["_nav_name"]
