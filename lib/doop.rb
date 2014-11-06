@@ -117,6 +117,7 @@ module Doop
     end
 
     def each_path_elem(path)
+      return if path == nil
       p = ""
       path.split("/").select{|r| !r.empty?}.each do |n|
         p += "/" + n
@@ -257,6 +258,7 @@ module Doop
       # open all parent questions
       each_path_elem_reverse(path) do |p|
         self[p + "/_open"] = true
+        self[p + "/_answered"] = false if p != path
       end
     end
 

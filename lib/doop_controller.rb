@@ -12,7 +12,6 @@ module Doop
     def initialize application_controller, &block
       @controller = application_controller
       @block = block
-      @debug_on_block = nil
       @current_page_block = method( :default_current_page )
       @all_pages_block = method( :default_all_pages )
     end
@@ -84,7 +83,6 @@ module Doop
       res[:page_path] = get_page_path
       res[:page_title] = @doop[res[:page_path]]["_nav_name"]
       res[:all_pages] = get_all_pages
-      res[:debug_on] = @debug_on_block != nil ? @debug_on_block.call : false
       @controller.render "index", :locals => { :res => res, :doop => @doop }
     end
 
@@ -134,10 +132,6 @@ module Doop
 
     def get_all_pages
       @all_pages_block.call
-    end
-
-    def debug_on &block
-      @debug_on_block = block
     end
 
     def load_yaml &block

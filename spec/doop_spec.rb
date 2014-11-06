@@ -41,6 +41,10 @@ describe "Doop" do
       expect( question["/pages/about_your_partner/dob/_answer"] ).to eq("cc")
       expect( question["/pages/about_your_partner/_answer"] ).to eq("dd")
       expect( question["/pages/_answer"] ).to eq("ee")
+
+      question.change( "/pages/about_you/dob" )
+      question.answer( { "answer" => "ff"} )
+      expect(question.currently_asked).to eq( "/pages/about_you" )
     end
 
   end
