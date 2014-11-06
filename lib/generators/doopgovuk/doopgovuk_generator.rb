@@ -5,7 +5,9 @@ class DoopgovukGenerator < Rails::Generators::Base
 
   def generate_layout
     copy_file "app/assets/stylesheets/demo.css.scss", "app/assets/stylesheets/#{name}.css.scss"
+    copy_file "app/assets/stylesheets/demo/application.css", "app/assets/stylesheets/#{name}/application.css"
     copy_file "app/assets/javascripts/demo.js.coffee", "app/assets/javascripts/#{name}.js.coffee"
+    copy_file "app/assets/javascripts/demo/application.js", "app/assets/javascripts/#{name}/application.js"
     template "app/controllers/demo_controller.rb", "app/controllers/#{name}_controller.rb"
     copy_file "app/views/layouts/application.html.erb",  "app/views/layouts/application.html.erb"
     directory "app/views/doop"
