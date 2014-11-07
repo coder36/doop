@@ -10,5 +10,6 @@
   <% if !label.nil? %>
     <label for="<%=name%>"><%=label%></label>
   <% end %>
-  <input id="<%=name%>" name="b_<%=name%>" type="text" value="<%=val%>"/><%=error res, "#{name}_error".to_sym %>
+  <%=error res, "#{name}_error".to_sym %>
+  <input id="<%=name%>" name="b_<%=name%>" type="text" value="<%=val%>"/>
 </div>

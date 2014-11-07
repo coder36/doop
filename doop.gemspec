@@ -11,6 +11,7 @@ if !Dir['doop_demo/*'].empty?
   FileUtils.cp "doop_demo/app/assets/stylesheets/demo/application.css", "#{dest}/app/assets/stylesheets/demo/application.css"
   FileUtils.cp "doop_demo/app/assets/javascripts/demo.js.coffee", "#{dest}/app/assets/javascripts/demo.js.coffee"
   FileUtils.cp "doop_demo/app/assets/javascripts/demo/application.js", "#{dest}/app/assets/javascripts/demo/application.js"
+  FileUtils.cp "doop_demo/app/assets/javascripts/demo/analytics.js.erb", "#{dest}/app/assets/javascripts/demo/analytics.js.erb"
   FileUtils.cp "doop_demo/app/controllers/demo_controller.rb", "#{dest}/app/controllers/demo_controller.rb"
   FileUtils.cp "doop_demo/app/views/layouts/application.html.erb", "#{dest}/app/views/layouts/application.html.erb"
   FileUtils.cp_r "doop_demo/app/views/doop", "#{dest}/app/views"

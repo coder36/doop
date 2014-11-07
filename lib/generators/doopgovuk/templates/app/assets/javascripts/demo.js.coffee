@@ -12,5 +12,5 @@ $( () ->
     if e.ctrlKey && e.keyCode == 89
       $('#doop_debug').dialog( "open")
     
-  
+  bind_ga_events()  
 )

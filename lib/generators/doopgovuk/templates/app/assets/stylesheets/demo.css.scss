@@ -146,13 +146,14 @@ button {
 }
 
 .error {
+  padding: 5px 0 7px 0;
+  span{
     color: red;
     border: 1px solid #B01117;
     background-color: #FFF3CF;
     padding: 2px 5px 2px 5px;
     border-radius: 5px;
-    margin: 10px 0 10px 0;
-    width: auto;
+  }
 }
 
 .navbar {
