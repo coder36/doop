@@ -1,10 +1,13 @@
 # Doop
 
-A question framework for govuk sites, inspired by the great work GDS have done to standardize the cross government internet presence.
+A question framework for govuk sites, inspired by the great work GDS have done to standardize the cross government internet presence.  Try out the demo...
 
 ## [Doopgovuk demo](http://blooming-wave-8670.herokuapp.com)
 
-Try out a demo... it's hosted on heroku so there may be a initial pause while heroku fires up the demo:
+it's hosted on heroku so there may be a initial pause while heroku fires up the dynamo.
+
+<a href="http://blooming-wave-8670.herokuapp.com"><img src="https://raw.githubusercontent.com/coder36/doop/master/notes/screenshots/doop_1.png"/></a>
+
 
 
 
