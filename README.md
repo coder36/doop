@@ -157,8 +157,40 @@ on_answer "/page/preamble/enrolled_before"  do |question,path, params, answer|
 end
 ```
 
-
 # Notes
+
+## Javascript
+
+Doop feels fast, because ajax is used to handle button presses.  Only the question pannel section is ever redrawn, and thats
+once the server side processing has completed.  Things to note:
+
+* The navigation links at the top, result in a hidden button being pressed
+* The browser back button, results in a hidden button being pressed.   
+
+### Back button
+
+Doop hijacks the the browser back button.  Pressing it will open the previous pages questions. This is done
+with the following [coffeescript](https://github.com/coder36/doop/blob/master/lib/generators/doopgovuk/templates/app/assets/javascripts/demo.js.coffee) code:
+
+    $( () ->
+      history.pushState("back", null, null);
+      if typeof history.pushState == "function"
+        history.pushState("back", null, null);
+        window.onpopstate = (evt) ->
+          history.pushState('back', null, null);
+          $( "#back_a_page" ).val( "pressed" )
+          $( "#back_a_page" ).click()
+    )
+
+### No javascript support ?
+
+Doop will work fine with java script disabled.  It still feels fast.  Take note of the following:
+
+* The entire page will be re-rendered when ever a button is pressed.
+* A `back` navigation button will appear at the bottom.  Normally javascript within [app/views/doop/_question_form.html.erb](https://github.com/coder36/doop/blob/master/lib/generators/doopgovuk/templates/app/views/doop/_question_form.html.erb) would set this to `$("#back_a_page").css( "display", "none" )`
+* The top navigation links will not work, but the website is perfectly usable and still feels fast. 
+
+
 
 ## Analytics 
 
