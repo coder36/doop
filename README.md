@@ -160,6 +160,29 @@ end
 
 # Notes
 
+## Analytics 
+
+Analytics is provided by [google anaytics](http://www.google.com/analytics/).  When you use the generator, a file named `app/assets/javascript/demo/anayltics.js.erb` will be created.  This contains the javascript code to integrate with google analytics.  Out of the box, the following  events will be recorded:
+
+
+| Event                           | Category    | Action    | Label
+|:--------------------------------|:------------|:----------|:-------- 
+|Backbutton clicked               | button      | click     | back-button
+|Navigation link clicked          | page        | changed   | page_id 
+|Question answered                | question    | answered  | question_id
+|Question re-opened               | question    | reopened  | question_id
+
+To get this working for your project, you will need to update [anayltics.js.erb](https://github.com/coder36/doop/blob/master/lib/generators/doopgovuk/templates/app/assets/javascripts/demo/analytics.js.erb) with your google Universal Analytics id.  
+
+Typically, jquery is used to dynamically bind the the 'GA send' code to the forms buttons. eg.
+
+     $("[id$=-change]").click( function() {
+       id = $(this).attr('id')
+       ga( 'send', 'event', 'question', 'reopened', id.replace( '-change', '' ) )
+     })
+
+
+
 ## Performance
 
 For the demo, the serialized questionaire is stored as a form parameter.  This is a nice approach as a general strategy since its completely stateless and as a result scalable.  
