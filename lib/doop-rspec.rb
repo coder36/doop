@@ -80,3 +80,7 @@
       page.find_by_id( "#{page_name}-nav" ).click
       wait_for_page page_name
     end
+
+    def back_a_page
+      page.execute_script( "$('#back_a_page').click()" )
+    end
