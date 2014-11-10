@@ -1,10 +1,13 @@
 # Doop
 
-A question framework for govuk sites, inspired by the great work GDS have done to standardize the cross government internet presence.
+A question framework for govuk sites, inspired by the great work GDS have done to standardize the cross government internet presence.  Try out the demo...
 
 ## [Doopgovuk demo](http://blooming-wave-8670.herokuapp.com)
 
-Try out a demo... it's hosted on heroku so there may be a initial pause while heroku fires up the demo:
+it's hosted on heroku so there may be a initial pause while heroku fires up the dynamo.
+
+<a href="http://blooming-wave-8670.herokuapp.com"><img src="https://raw.githubusercontent.com/coder36/doop/master/notes/screenshots/doop_1.png"/></a>
+
 
 
 
@@ -214,18 +217,74 @@ Typically, jquery is used to dynamically bind the the 'GA send' code to the form
      })
 
 
+# Testing
 
-## Performance
+The generated doopgovuk project, will give you a set of rspec tests, which use capybara, to click buttons, set
+fields etc through a scenario.  These scenarios will form the acceptance tests.  These should be included
+as part of a CI pipeline, on the road to production.  
+
+## Headless web driver
+
+When using TDD, you need to get into a tight feedback loop.  Your tests need to be quick and this means compromises.  
+The compromise doop makes, is to use the `:webkit` headless driver.  This is blisteringly fast, but the downside
+is that you can't see what its doing.  The webkit headless driver relies on a framebuffer, so to get it working,
+ you'll need to install some libraries:
+
+    sudo apt-get install qt4-dev-tools libqt4-dev libqt4-core libqt4-gui xvfb
+
+The driver is defined in [spec/rails_helper.rb](https://github.com/coder36/doop/blob/master/lib/generators/doopgovuk/templates/spec/rails_helper.rb)
+
+
+## DSL
+
+Doop provides an [inituitive DSL](https://github.com/coder36/doop/blob/master/lib/generators/doopgovuk/templates/spec/features/demo_spec.rb) for writing acceptance tests.  Try to limit the number of scenarios, to keep the test run as quick as possible.  Perhaps have an end to end scenario which covers every  question and every flow, then have another one which covers the way that 95% people would answer.  The test should work with `:js=>false`, but again, the vast majority of people will be using javascript.  
+
+    feature "Child Benefit online form" do
+      scenario "Complete Child Benefit form", :js => true do
+        before_you_begin
+        preamble
+      end
+      
+      def before_you_begin
+        visit '/demo/index'
+        wait_for_page( "before_you_begin" )
+        click_button "Start"
+      end
+      def preamble
+        wait_for_page( "preamble" )
+        
+        answer_question( "income_more_than_50000")  do
+          click_button "No,"
+          expect( tooltip ).to be_visible
+        end
+        
+        expect( question "do_you_still_want_to_apply" ).to be_disabled
+        
+        change_question( "income_more_than_50000") do
+          expect( change_answer_tooltip ).to be_visible
+          click_button "Yes," 
+        end
+      end
+    end
+
+
+## Testing Gotchas
+
+* The :webkit driver seems to hang when using google analytics, so for development and test, google analytics are
+disabled.
+
+
+
+# Performance
 
 For the demo, the serialized questionaire is stored as a form parameter.  This is a nice approach as a general strategy since its completely stateless and as a result scalable.  
 Its also very fast.  
 
-I've worked with a lot of java farmeworks (I'm thinking JSF!) and in comparison I can assure you that the demo application is fast.  Doop fully supports jruby, so you may get some 
-optimisation going down that route.  As mentioned earlier its completely stateless, so you can scale by simply firing up more servers. 
+I've worked with a lot of java farmeworks (I'm thinking JSF!) and in comparison I can assure you that the demo application is fast.  Doop fully supports jruby, so you may get some optimization going down that route.  As mentioned earlier its completely stateless, so you can scale by simply firing up more servers. 
 
 I tested it with passenger and nginx and it was lightening fast.  Without any optimisation each request was taking about 20ms.
 
-## Jruby
+# Jruby
 
 The yaml serialization uses encryption, so you will need to tell java to allow unlimted strength cryptography.  Create a file config/initializers/unlimited_strength_cryptography
 
