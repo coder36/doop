@@ -12,8 +12,6 @@ module Doop
     def initialize application_controller, &block
       @controller = application_controller
       @block = block
-      @current_page_block = method( :default_current_page )
-      @all_pages_block = method( :default_all_pages )
     end
 
     def index
@@ -62,7 +60,7 @@ module Doop
         doop.change( path )
 
         # unanswer all pages after path
-        pages = @all_pages_block.call 
+        pages = all_pages 
         pages[pages.index(path), pages.length].each do |n|
           doop[n]["_answered"] = false
         end
@@ -101,7 +99,7 @@ module Doop
       @doop = Doop.new()
       @self_before_instance_eval = eval "self", @block.binding
       instance_exec @doop, &@block
-      @doop.yaml = @load_yaml_block.call
+      @doop.yaml = load_yaml
       @doop.init
       @doop
     end
@@ -109,7 +107,7 @@ module Doop
     def in_doop
       load
       res = yield(@doop)
-      @save_yaml_block.call @doop.dump
+      save_yaml @doop.dump
       return res if res.kind_of? Hash
       {}
     end
@@ -123,42 +121,36 @@ module Doop
       @self_before_instance_eval.send method, *args, &block
     end
 
-    def current_page &block
-      @current_page_block = block
-    end
-
-    def all_pages &block
-      @all_pages_block = block
-    end
-
     def get_page
       path = @doop.currently_asked
-      @doop[@current_page_block.call( path )]["_page"]
+      @doop[current_page( path )]["_page"]
     end
 
     def get_page_path
       path = @doop.currently_asked
-      @current_page_block.call( path )
+      current_page( path )
     end
 
-    def get_all_pages
-      @all_pages_block.call
+    def load_yaml
+      data = params["doop_data"] 
+      return ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base).decrypt_and_verify(data) if !data.nil?
+      @yaml_block.call
     end
 
-    def load_yaml &block
-      @load_yaml_block = block
+    def save_yaml yaml
+      @controller.request["doop_data"] = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base).encrypt_and_sign(yaml)
     end
 
-    def save_yaml &block
-      @save_yaml_block = block
+    def yaml &block
+      @yaml_block = block
     end
 
-    def default_current_page path 
+    def current_page path 
       a = path.split("/").reject {|s| s.empty? }[1] 
       "/page/#{a}"
     end
 
-    def default_all_pages 
+    def get_all_pages 
       l = []
       doop.each_question_with_regex_filter "^\/page/\\w+$" do |question,path|
         l << path if doop[path]["_enabled"]
