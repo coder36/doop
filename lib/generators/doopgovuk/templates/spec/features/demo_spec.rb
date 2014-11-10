@@ -10,6 +10,8 @@ feature "Child Benefit online form" do
     about_you
     children
     declaration
+
+    page_navigation
   end
 
   def before_you_begin
@@ -136,8 +138,25 @@ feature "Child Benefit online form" do
 
   end
 
-
   def declaration
     wait_for_page( "declaration" )
   end
+
+  def page_navigation
+    wait_for_page( "declaration" )
+    change_page( "about_you" )
+    back_a_page
+    wait_for_page( "preamble" )
+    back_a_page
+    wait_for_page( "before_you_begin" )
+    click_button "Start"
+    wait_for_page( "preamble" )
+    click_button "Continue"
+    wait_for_page( "about_you" )
+    click_button "Continue"
+    wait_for_page( "children" )
+    click_button "Continue"
+    wait_for_page( "declaration" )
+  end
+
 end

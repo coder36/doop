@@ -9,18 +9,16 @@ class DemoController < ApplicationController
   delegate :index, :answer, to: :@doop_controller
   before_filter :setup_doop
 
+  def harness
+    return if request.get?
+    @doop_controller.inject_yaml params["yaml"]
+    index
+  end
+  
   def setup_doop
     @doop_controller = Doop::DoopController.new self do |doop|
 
-      load_yaml do
-        data = params["doop_data"] 
-        if data != nil
-          if Rails.env.development? || Rails.env.test? || params.include?("harness")
-            next data
-          else
-            next ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base).decrypt_and_verify data if !Rails.env.development?
-          end
-        end
+      yaml do
 
         <<-EOS
           page: {
@@ -115,16 +113,6 @@ class DemoController < ApplicationController
                 }
              }
           EOS
-      end
-
-      save_yaml do |yaml|
-        if Rails.env.development? || Rails.env.test?
-          request["doop_data"] = yaml
-        else
-          crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
-          data = crypt.encrypt_and_sign(yaml)
-          request["doop_data"] = data
-        end
       end
 
 
@@ -265,32 +253,31 @@ class DemoController < ApplicationController
     end
   end
 
-end
-
-
-def format_date d
-  begin
-    return nil if d.length != 10
-    Date.strptime( d, "%d/%m/%Y" ).strftime( "%-d %B %Y" )
-  rescue
-    nil
-  end
-end
-
-def validate answer,fields=nil
-  res = {}
-
-  if fields == nil
-      res["answer_error".to_sym] = "Can not be empty" if answer.squish.empty?
-      return res
+  def format_date d
+    begin
+      return nil if d.length != 10
+      Date.strptime( d, "%d/%m/%Y" ).strftime( "%-d %B %Y" )
+    rescue
+      nil
+    end
   end
 
-  fields.each do |f|
-    res["#{f}_error".to_sym] = "Can not be empty" if answer[f].squish.empty?
-  end
-  res
-end
+  def validate answer,fields=nil
+    res = {}
 
-def is_number num
-  num =~ /\A[-+]?[0-9]*\.?[0-9]+\Z/
+    if fields == nil
+        res["answer_error".to_sym] = "Can not be empty" if answer.squish.empty?
+        return res
+    end
+
+    fields.each do |f|
+      res["#{f}_error".to_sym] = "Can not be empty" if answer[f].squish.empty?
+    end
+    res
+  end
+
+  def is_number num
+    num =~ /\A[-+]?[0-9]*\.?[0-9]+\Z/
+  end
+
 end

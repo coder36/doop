@@ -25,6 +25,7 @@ class DoopgovukGenerator < Rails::Generators::Base
     route "post '#{name}/index'"
     route "post '#{name}/answer'"
     route "get '#{name}/harness'"
+    route "post '#{name}/harness'"
 
     gem 'govuk_frontend_toolkit'
     gem 'govuk_template'
