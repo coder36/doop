@@ -56,11 +56,10 @@ module Doop
 
     def change_page path
       in_doop do |doop|
-        #path = @controller.params["path"]
         doop.change( path )
 
         # unanswer all pages after path
-        pages = all_pages 
+        pages = get_all_pages 
         pages[pages.index(path), pages.length].each do |n|
           doop[n]["_answered"] = false
         end
@@ -156,6 +155,10 @@ module Doop
         l << path if doop[path]["_enabled"]
       end
       l
+    end
+
+    def inject_yaml yaml
+      @controller.params["doop_data"] = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base).encrypt_and_sign(yaml)
     end
   end
 end
