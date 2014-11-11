@@ -1,6 +1,6 @@
 # Doop
 
-A question framework for govuk sites, inspired by the great work GDS have done to standardize the cross government internet presence.  Try out the demo...
+A question framework for govuk sites, inspired by the great work [GDS](https://gds.blog.gov.uk) have done to standardize the cross government internet presence.  Try out the demo...
 
 ## [Doopgovuk demo](http://blooming-wave-8670.herokuapp.com)
 
@@ -32,11 +32,11 @@ This is still in development, so if you want the latest, then add `gem 'doop', g
 
 
 ## Background
-Whilst working with the Student Loans company and GDS we discovered that the best way to get a student to fill a form in was to progressively ask questions, one after the other rather than as one big form.  User experience testing showed this was a far less intimidating experience, and they would more likely stick at it.  Furthermore, based on pevious answers, we  can choose which questions to ask.  This makes each questionaire effectively tailored to the individual student.
+Whilst working with the Student Loans company and [GDS](https://gds.blog.gov.uk) we discovered that the best way to get a student to fill a form in was to progressively ask questions, one after the other rather than as one big form.  User experience testing showed this was a far less intimidating experience, and they would more likely stick at it.  Furthermore, based on pevious answers, we  can choose which questions to ask.  This makes each questionaire effectively tailored to the individual student.
 
 Other things we learned, was that students hate answering lots of questions, only to find at the end they are not eligible.  So the order of questions is very important, and thats why some of the early questions when applying for a student loan may seem a bit obscure, but they are designed to weed out those who are inelligble as soon as possible. 
 
-If you compare the Student loans site and the DVLA site, which are both govuk questionaires you will see that they have been implemented in very different ways, and as a result look fairly different, but essentially do the same thing.  In fact I found that within the same company, you had multiple approaches, and completely different technology stacks to achieve the same thing.  I spent months writing Daone of these sites, 
+If you compare the Student loans site and the [DVLA](https://www.taxdisc.service.gov.uk) site, which are both govuk questionaires you will see that they have been implemented in very different ways, and as a result look fairly different, but essentially do the same thing.  In fact I found that within the same company, you had multiple approaches, and completely different technology stacks to achieve the same thing.  I spent months writing Daone of these sites, 
 
 Designing something from scratch is expensive and time consuming.  This is where GDS have added real value.  They have provided a set of ruby gems to trivialise the production of
 govuk sites.  One thing they are lacking however is a gem to trivialize the creation of complex questionaires.  And this is why government organisations are seemingly reinventing
