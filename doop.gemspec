@@ -2,22 +2,6 @@
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'doop/version'
-require 'fileutils'
-
-# Copy files for rails doopgovuk template:
-if !Dir['doop_demo/*'].empty?
-  dest = "lib/generators/doopgovuk/templates"
-  FileUtils.cp "doop_demo/app/assets/stylesheets/demo.css.scss", "#{dest}/app/assets/stylesheets/demo.css.scss"
-  FileUtils.cp "doop_demo/app/assets/stylesheets/demo/application.css", "#{dest}/app/assets/stylesheets/demo/application.css"
-  FileUtils.cp "doop_demo/app/assets/javascripts/demo.js.coffee", "#{dest}/app/assets/javascripts/demo.js.coffee"
-  FileUtils.cp "doop_demo/app/assets/javascripts/demo/application.js", "#{dest}/app/assets/javascripts/demo/application.js"
-  FileUtils.cp "doop_demo/app/assets/javascripts/demo/analytics.js.erb", "#{dest}/app/assets/javascripts/demo/analytics.js.erb"
-  FileUtils.cp "doop_demo/app/controllers/demo_controller.rb", "#{dest}/app/controllers/demo_controller.rb"
-  FileUtils.cp "doop_demo/app/views/layouts/application.html.erb", "#{dest}/app/views/layouts/application.html.erb"
-  FileUtils.cp_r "doop_demo/app/views/doop", "#{dest}/app/views"
-  FileUtils.cp_r "doop_demo/app/views/demo", "#{dest}/app/views"
-  FileUtils.cp_r "doop_demo/spec", "#{dest}"
-end
 
 Gem::Specification.new do |spec|
   spec.name          = "doop"
@@ -38,6 +22,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.1"
 
-  spec.add_runtime_dependency "rails", "~> 4.1"
+  spec.add_runtime_dependency "rails", ">= 4.1"
 end
 

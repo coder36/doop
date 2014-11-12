@@ -1,5 +1,5 @@
 class DoopgovukGenerator < Rails::Generators::Base
-  source_root File.expand_path('../templates', __FILE__)
+  source_root File.expand_path('../../../demo', __FILE__)
   argument :name, :type => :string, :default => "demo"
 
 
@@ -27,9 +27,11 @@ class DoopgovukGenerator < Rails::Generators::Base
     route "get '#{name}/harness'"
     route "post '#{name}/harness'"
 
-    gem 'govuk_frontend_toolkit'
-    gem 'govuk_template'
-    gem 'jquery-ui-rails'
+    gem "govuk_frontend_toolkit"
+    gem "govuk_template"
+    gem "jquery-ui-rails"
+    gem "blueimp-gallery"
+    gem "jquery-fileupload-rails"
 
     gem_group :development do
       gem 'rspec-rails'

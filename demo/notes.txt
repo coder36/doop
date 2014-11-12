@@ -1,0 +1,3 @@
+On ubuntu, to allow pg to install run 
+
+sudo apt-get install libpq-dev
