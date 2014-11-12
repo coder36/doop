@@ -12,7 +12,6 @@ class DoopgovukGenerator < Rails::Generators::Base
     template "app/controllers/demo_controller.rb", "app/controllers/#{name}_controller.rb"
     copy_file "app/views/layouts/application.html.erb",  "app/views/layouts/application.html.erb"
     directory "public/uploads"
-    copy_file "public/uploads/.keep",  "public/uploads/.keep"
     directory "app/views/doop"
     directory "app/views/demo", "app/views/#{name}"
     gsub_file "app/controllers/#{name}_controller.rb", /DemoController/, "#{name.capitalize}Controller"

@@ -16,4 +16,6 @@
 /tmp
 *.swp
 /public/assets
-/public/uploads
+/public/uploads/*.jpg
+/public/uploads/*.gif
+/public/uploads/*.png
