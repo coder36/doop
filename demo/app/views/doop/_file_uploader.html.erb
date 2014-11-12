@@ -1,14 +1,14 @@
 <div id="image-links">
 <% answer.keys.each do |f| %>
   <div class="uploaded_image">
-    <a href='<%="/uploads/#{answer[f]}"%>' data-gallery><img height="200px" src='<%="/uploads/#{answer[f]}"%>'/></a><br/>
+    <a href='<%="#{answer[f]}"%>' data-gallery><img height="200px" src='<%="#{answer[f]}"%>'/></a><br/>
     <button class="button-secondary" name="remove_file" value="<%=f%>">Remove</button>
   </div>
 <% end %>
 </div>
 <br/>
 <div class="clear"></div>
-
+<p>As this demo is hosted on Heroku, there is no storage, so any uploads will appear as a sample image.</p>
 <input id="fileupload" type="file" name="files[]" multiple>
 <button id="upload_button" name="upload">Upload photo...</button>
 <div id="progress" class="progress">

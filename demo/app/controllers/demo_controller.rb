@@ -266,14 +266,18 @@ class DemoController < ApplicationController
         end
         if params.include? "files"
           params["files"].each do |uploaded_io|
-            ext = uploaded_io.original_filename[/.*\.(\w+)/,1]
-            filename = (0...16).map { (65 + rand(26)).chr }.join + ".#{ext}"
-            filename.downcase!
+            if File.directory? Rails.root.join('public','uploads')
+              ext = uploaded_io.original_filename[/.*\.(\w+)/,1]
+              filename = (0...16).map { (65 + rand(26)).chr }.join + ".#{ext}"
+              filename.downcase!
 
-            File.open(Rails.root.join('public', 'uploads', filename), 'wb') do |file|
-              file.write(uploaded_io.read)
+              File.open(Rails.root.join('public', 'uploads', filename), 'wb') do |file|
+                file.write(uploaded_io.read)
+              end
+              a << "/uploads/#{filename}"
+            else
+              a <<  view_context.image_path("cert_sample.jpg")
             end
-            a << filename
           end
         end
         file_count = 0
