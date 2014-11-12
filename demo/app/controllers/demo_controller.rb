@@ -259,11 +259,12 @@ class DemoController < ApplicationController
 
 
       def file_upload_control question, path, params, answer
-        a = answer.values
-
+        
         if params.include? "remove_file"
-          a.delete( answer[params["remove_file"]] )
+          answer.delete( params["remove_file"] )
         end
+
+        a = answer.values
         if params.include? "files"
           params["files"].each do |uploaded_io|
             if File.directory? Rails.root.join('public','uploads')
