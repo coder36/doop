@@ -38,7 +38,7 @@
     dataType: 'script',
     acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
     singleFileUploads: false,
-    disableImageResize: false,
+    disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
     imageMaxWidth: 800,
     imageMaxHeight: 800,
     imageCrop: false

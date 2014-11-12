@@ -1,12 +1,12 @@
 # Doop
 
-A question framework for govuk sites, inspired by the great work [GDS](https://gds.blog.gov.uk) have done to standardize the cross government internet presence.  Try out the demo...
+A question framework for govuk sites, inspired by the great work [GDS](https://gds.blog.gov.uk) have done to standardize the cross government internet presence.  Try out the demo:
 
-## [Doopgovuk demo](http://blooming-wave-8670.herokuapp.com)
+## [Doopgovuk demo](http://blooming-wave-8670.herokuapp.com/demo/index)
 
 it's hosted on heroku so there may be a initial pause while heroku fires up the dynamo.
 
-<a href="http://blooming-wave-8670.herokuapp.com"><img src="https://raw.githubusercontent.com/coder36/doop/master/notes/screenshots/doop_1.png"/></a>
+<a href="http://blooming-wave-8670.herokuapp.com/demo/index"><img src="https://raw.githubusercontent.com/coder36/doop/master/notes/screenshots/doop_1.png"/></a>
 
 
 
@@ -52,6 +52,7 @@ If your govuk site requires any kind of questionaire, doop is the answer.
 * Ability to Change answer
 * Summarize answers
 * Broswer backbutton integration
+* File upload capability
 * Stateless
 * Fast
 * Ajax call backs
@@ -321,8 +322,7 @@ Don't forget to deal with database drivers.  In your Gemfile, you will need to u
 ## TODO
 
 * Refactor -  make the code, simpler and read better
-* Doop-Rspec - it would be nice to have a DSL to drive answering questions.  This could be extended to capybara.
-* Responsive - on the whole the govuk frontend is responsive, fonts resize etc.  But there is still some work to be done.
+* Language localisation
 
 
 ## Contributing
