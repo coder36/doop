@@ -1,5 +1,9 @@
 module DoopHelper
 
+  def file_uploader answer
+    render "doop/file_uploader", :answer => answer
+  end
+
   def info_box &block
     render "doop/info_box", :content => block
   end
