@@ -28,8 +28,6 @@ Assuming ruby, rails and nodejs is installed:
 
 Navigate to http://localhost:3000/demo/index
 
-This is still in development, so if you want the latest, then add `gem 'doop', git: 'git://github.com/coder36/doop.git'` to your Gemfile.
-
 
 ## Background
 Whilst working with the Student Loans company and [GDS](https://gds.blog.gov.uk) we discovered that the best way to get a student to fill a form in was to progressively ask questions, one after the other rather than as one big form.  User experience testing showed this was a far less intimidating experience, and they would more likely stick at it.  Furthermore, based on pevious answers, we  can choose which questions to ask.  This makes each questionaire effectively tailored to the individual student.
@@ -71,7 +69,7 @@ Make sure that the gemfile contains gem 'doop'.   Then run
 
 Navigate to http://localhost:3000/demo/index and you will see the demo questionaire.  
     
-See the [demo rails controller](https://github.com/coder36/doop/blob/master/lib/generators/doopgovuk/templates/app/controllers/demo_controller.rb) to get a feel for the DSL.
+See the [demo rails controller](https://github.com/coder36/doop/blob/master/demo/app/controllers/demo_controller.rb) to get a feel for the DSL.  Also take a look at the [.erb](https://github.com/coder36/doop/blob/master/demo/app/views/demo/_preamble.html.erb) file which defines the web page layout and test.
 
 ## Yaml
 
