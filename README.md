@@ -79,16 +79,19 @@ Doop is initiated with a Yaml data structure:
 
     page: {
       preamble: {
-        _page: "preamble",
-        _nav_name: "Apply Online",
-        enrolled_before: {
-          _question: "Have you enrolled for this service before ?"
-        },
-        year_last_applied: {
-          _question: "What year did you last apply?"
-        }
+       _page: "preamble",
+       _nav_name: "Preamble",
+       income_more_than_50000: {
+       _question: "Do you have an income of more than £50,000 a year ?"
+      },
+      do_you_still_want_to_apply: {
+        _question: "Do you still want to apply for child benefit?"
+      },
+      proof_of_id: {
+        _question: "We need proof of your identity",
+        _answer: {}
       }
-    }
+    },
 
 Once initialized doop will add meta data to the structure.  Each question will get meta data.  So the above yaml will end up looking like:
 
@@ -105,22 +108,15 @@ Once initialized doop will add meta data to the structure.  Each question will g
         _enabled: true,
         _page: "preamble",
         _nav_name: "Apply Online",
-        enrolled_before: {
+        income_more_than_50000: {
           _answered: false,
           _answer: "",
           _summary: "",
           _enabled: true,
-          _question: "Have you enrolled for this service before ?"
+          _question: "Do you have an income of more than £50,000 a year ?"
         },
-        year_last_applied: {
-          _answered: false,
-          _answer: "",
-          _summary: "",
-          _enabled: true,
-          _question: "What year did you last apply?"
-        }
-      }
-    }
+        ...
+  
 
 Meta data always starts with an _.  Doop uses the meta data to keep track of whats been answerd, what's currently being asked, and what questions are enabled.
 
@@ -130,8 +126,8 @@ Meta data always starts with an _.  Doop uses the meta data to keep track of wha
 
 The questions will be asked in the order in which they appear in yaml.  So for above, the order of questions will be:
 
-1.  page/preamble/enrolled_before
-2.  page/preamble/year_last_applied
+1.  page/preamble/income_more_than_50000
+2.  page/preamble/do_you_still_want_to_apply
 3.  page/preamble
 4.  page
 
@@ -143,10 +139,10 @@ As the questions are answered, callbacks will invoked.
 
 ## Callbacks
 
-Call backs are used to manipulate the yaml structure, to set _metadata etc.  In the example below, when /page/preamble/enrolled_before is answered, the summary will be set to the answer.
+Call backs are used to manipulate the yaml structure, to set _metadata etc.  In the example below, when /page/preamble/do_you_still_want_to_apply is answered, the summary will be set to the answer.
 
 ```ruby
-on_answer "/page/preamble/enrolled_before"  do |question,path, params, answer|
+on_answer "/page/preamble/do_you_still_want_to_apply"  do |question,path, params, answer|
   answer_with( question, { "_summary" => answer } )
 end
 
@@ -155,11 +151,34 @@ end
 On_answer call backs can be used to change the question flow.  The code below will enable or disable the year_last_applied question depending on whether the answer was Yes or No:
 
 ```ruby
-on_answer "/page/preamble/enrolled_before"  do |question,path, params, answer|
+on_answer "/page/preamble/income_more_than_50000"  do |question,path, params, answer|
   answer_with( question, { "_summary" => answer } )
-  enable( "/page/preamble/year_last_applied", answer == "Yes" )
+  enable( "/page/preamble/do_you_still_want_to_apply", answer == "Yes" )
 end
 ```
+
+## DSL for defining content
+
+Doop defines a DSL for writing the .erb to display the questions:
+
+    <%=question_form doop, res do %>
+      <%=question "/page/preamble" do |root, answer| %>
+      
+        <%=question "/page/preamble/income_more_than_50000" do |root,answer| %>
+          <button name="b_answer" value="Yes">Yes</button><br/>
+          <button name="b_answer" value="No"></button>
+        <% end %>
+        
+        <%=question "/page/preamble/do_you_still_want_to_apply" do |root,answer| %>
+          <button name="b_answer" value="Yes">Yes, I still want to apply for child benefit</button
+        <% end %>
+        
+        <% when_answered "/page/preamble" do %>
+          <button>Continue and Save</button>
+        <% end %>
+        
+      <% end %>
+    <% end %>
 
 # Notes
 
