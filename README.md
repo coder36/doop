@@ -15,7 +15,7 @@ it's hosted on heroku so there may be a initial pause while heroku fires up the 
 
 Assuming ruby, rails and nodejs is installed:
 
-    $ sudo apt-get install qt4-dev-tools libqt4-dev libqt4-core libqt4-gui xvfb libpq-dev
+    $ sudo apt-get install qt4-dev-tools libqt4-dev libqt4-core libqt4-gui xvfb libpq-dev nodejs
 
     These are needed to support the headless capybara test suite.
 
@@ -248,7 +248,7 @@ The compromise doop makes, is to use the `:webkit` headless driver.  This is bli
 is that you can't see what its doing.  The webkit headless driver relies on a framebuffer, so to get it working,
  you'll need to install some libraries:
 
-    sudo apt-get install qt4-dev-tools libqt4-dev libqt4-core libqt4-gui xvfb libpq-dev
+    sudo apt-get install qt4-dev-tools libqt4-dev libqt4-core libqt4-gui xvfb libpq-dev nodejs
 
 The driver is defined in [spec/rails_helper.rb](https://github.com/coder36/doop/blob/master/lib/generators/doopgovuk/templates/spec/rails_helper.rb)
 
