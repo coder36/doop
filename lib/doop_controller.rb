@@ -91,7 +91,13 @@ module Doop
       res[:page_path] = get_page_path
       res[:page_title] = @doop[res[:page_path]]["_nav_name"]
       res[:all_pages] = get_all_pages
+      res[:current_question] = @doop.currently_asked
+      res[:current_question_id] = question_id res[:current_question]
       @controller.render "index", :locals => { :res => res, :doop => @doop }
+    end
+
+    def question_id path
+      path.split("/").last
     end
 
     def load

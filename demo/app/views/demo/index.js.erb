@@ -3,3 +3,5 @@ $("#doop_debug").html( "<%= escape_javascript( render 'doop/debug', :doop => doo
 $("#nav_path").val("")
 $("#back_a_page").val("")
 bind_ga_events()
+$("#<%=res[:current_question_id]%>").css( "display", "none" )
+$("#<%=res[:current_question_id]%>").fadeIn(100)
