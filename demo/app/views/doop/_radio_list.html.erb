@@ -1,0 +1,14 @@
+<div class="radio_box">
+  <ul>
+
+    <% hash.each do |val, label| %>
+
+      <li>
+        <label>
+          <input name="b_<%=name%>" type="radio" value="<%=val%>" <%=answer==val ? "checked" : ""%>  ><%=label%>
+        </label>
+      </li>
+
+    <% end %>
+  </ul>
+</div>

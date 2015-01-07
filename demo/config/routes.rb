@@ -6,6 +6,13 @@ Rails.application.routes.draw do
   post 'demo/upload_image'
   get 'demo/harness'
   root 'demo#index'
+
+  post 'sasdemo/answer'
+  get 'sasdemo/index'
+  post 'sasdemo/index'
+  post 'sasdemo/harness'
+  post 'sasdemo/upload_image'
+  get 'sasdemo/harness'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

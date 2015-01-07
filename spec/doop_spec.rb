@@ -1,4 +1,5 @@
 require "spec_helper"
+require 'pry'
 
 describe "Doop" do
 
@@ -297,6 +298,55 @@ describe "Doop" do
       expect(question.all_answered("/root")).to eq(true)
       question.answer({ "answer" => "provided"} )
       expect(question.all_answered("/")).to eq(true)
+    end
+
+    it "allows all subsequent questions to be unanswered" do
+      expect(question.currently_asked).to eq( "/root/age" )
+      question.answer( {"answer" => 36} )
+      question.answer( {"answer" => "address1" } )
+      question.answer( {"answer" => "address2"} )
+      question.answer({ "answer" => "address3"} )
+      expect(question.all_answered("/root/address")).to eq(true)
+      expect(question.all_answered("/root")).to eq(false)
+      question.answer({ "answer" => "provided"} )
+      expect(question.all_answered("/root")).to eq(true)
+      question.answer({ "answer" => "provided"} )
+      expect(question.all_answered("/")).to eq(true)
+
+      question.unaswer_all_questions_after "/root/address/address_line__1"
+      expect( question["/root/address/address_line__1/_answered"] ).to eq(true)
+      expect( question["/root/address/address_line__2/_answered"] ).to eq(false)
+      expect( question["/root/address/address_line__3/_answered"] ).to eq(false)
+      expect( question["/root/address/_answered"] ).to eq(false)
+      expect( question["/root/_answered"] ).to eq(false)
+      question.ask_next
+
+      expect(question.currently_asked).to eq( "/root/address/address_line__2" )
+
+    end
+
+    it "allows all subsequent questions to be disabled and unanswered" do
+      expect(question.currently_asked).to eq( "/root/age" )
+      question.answer( {"answer" => 36} )
+      question.answer( {"answer" => "address1" } )
+      question.answer( {"answer" => "address2"} )
+      question.answer({ "answer" => "address3"} )
+      expect(question.all_answered("/root/address")).to eq(true)
+      expect(question.all_answered("/root")).to eq(false)
+      question.answer({ "answer" => "provided"} )
+      expect(question.all_answered("/root")).to eq(true)
+      question.answer({ "answer" => "provided"} )
+      expect(question.all_answered("/")).to eq(true)
+
+      question.unaswer_all_questions_after "/root/address/address_line__1", :and_disable_questions => true
+      expect( question["/root/address/address_line__1/_answered"] ).to eq(true)
+      expect( question["/root/address/address_line__2/_enabled"] ).to eq(false)
+      expect( question["/root/address/address_line__2/_answered"] ).to eq(false)
+      question.ask_next
+
+      expect(question.currently_asked).to eq( "/root/address" )
+
+
     end
 
   end

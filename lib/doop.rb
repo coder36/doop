@@ -328,6 +328,73 @@ module Doop
       question[ "_enabled" ] && question[ "_answered" ] && question[ "_open" ]
     end
 
+    def disable_all_questions_after start_path
+      parent_path = parent_of start_path
+      flag = false
+
+      each_question do |question,path|
+        if flag==true && path.start_with?(parent_path)
+          question["_enabled"] = false
+        end
+        flag = true if start_path == path
+      end
+    end
+
+    def enable_all_questions_after start_path, options = {}
+      parent_path = parent_of start_path
+      flag = false
+
+
+      each_question do |question,path|
+        if flag==true && path.start_with?(parent_path)
+          question["_enabled"] = true
+          question["_answered"] = false if options[:setting_answered] != nil && options[:setting_answered] == false
+        end
+        flag = true if start_path == path
+      end
+    end
+
+    def unaswer_all_questions_after start_path, options={}
+
+      unanswer_flag = false
+      parent_path = parent_of start_path
+
+      each_question do |question,path|
+        if unanswer_flag
+          if path.start_with? parent_path
+            question["_answered"] = false
+            question["_enabled"] = false if options[:and_disable_questions]
+
+            each_path_elem_reverse(path) do |p|
+              self[p + "/_answered"] = false if p != path
+            end
+          end
+
+        end
+
+        if start_path == path
+          unanswer_flag = true
+        end
+
+      end
+
+    end
+
+    def parent_of path
+      p = path.split("/")
+      p.pop
+      p.join("/")
+    end
+
+    def enable_question path, options = {}
+      flag = options[:if]
+      set_answered = options[:set_answered]
+      root = self[path]
+      root["_enabled"] = flag == nil ? true : flag
+      root["_answered"] = false if set_answered != nil && set_answered == false
+
+    end
+
 
   end
 

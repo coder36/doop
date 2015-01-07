@@ -79,7 +79,10 @@ class DemoController < ApplicationController
               },
               nino: {
                 _question: "What is your national insurance number ?"
-              }
+              },
+              marital_status: {
+                _question: "What is your marital status ?"
+              },
 
             },
             children: {
@@ -202,6 +205,11 @@ class DemoController < ApplicationController
       on_answer "/page/about_you/nino" do |question, path, params, answer|
         res = validate( answer )
         next res if !res.empty?
+        answer_with( question, { "_summary" => answer } )
+      end
+
+      on_answer "/page/about_you/marital_status" do |question, path, params, answer|
+        next { :no_answer => "Please select an option" } if answer == nil
         answer_with( question, { "_summary" => answer } )
       end
 

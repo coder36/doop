@@ -46,6 +46,8 @@ feature "Child Benefit online form" do
 
   def about_you
     wait_for_page( "about_you" )
+
+
     answer_question( "your_name") do
       b_fill_in( "title" => "Mr", "surname" => "Middleton", "firstname" => "Mark", "middlenames" => "Alan")
       click_button "Continue" 
@@ -97,6 +99,12 @@ feature "Child Benefit online form" do
       b_fill_in( "answer" => "00123456A" )
       click_button "Continue"
       expect( rollup_text ).to eq( "00123456A" )
+    end
+
+    answer_question( "marital_status" ) do
+      choose( "Married" )
+      click_button "Continue" 
+      expect( rollup_text ).to eq ( "Married" )
     end
 
     click_button "Continue"

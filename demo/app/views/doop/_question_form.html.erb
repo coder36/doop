@@ -1,6 +1,10 @@
 <%=form_tag( {action: "answer"}, :multipart => true, :authenticity_token => true, :remote => true ) do %>
   <div class="question_form" id="<%=res[:page]%>-page">
-    <%=render "doop/navbar", :res => res, :doop => doop %> 
+
+    <% if res[:display_nav] %>
+      <%=render "doop/navbar", :res => res, :doop => doop %> 
+    <% end %>
+
     <h1 id="page_title"><%=res[:page_title]%></h1>
     <% content.call %>
   </div>

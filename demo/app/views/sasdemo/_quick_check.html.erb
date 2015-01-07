@@ -1,0 +1,172 @@
+<%=question_form doop, res do %>
+  <%=question "/page/quick_check" do |root, answer| %>
+
+
+    <%=question "/page/quick_check/work_status" do |root,answer| %>
+      <%=info_box do %>
+        <p>
+        Self-employed includes running your own business, or being partner in a business partnership, 
+        or a sole trader. If you’re not sure what your work status is, choose ‘other’.
+        </p>
+      <% end %>
+
+      <%=error res, :no_answer %>
+      <%=radio_list "answer", answer, res, { 
+        "Employed" => "Employed (even if just for part of the year)", 
+        "Self-employed" => "Self-employed (even if just for part of the year)", 
+        "Employed and self-employed" => "Employed and self-employed",
+        "Director of a company" => "Director of a company",
+        "Director of a non-profit-organisation" => "Director of a non-profit organisation, eg a charity, who doesn't get any pay or benefits (like travel expenses or a company car)",
+        "Retired" => "Retired",
+        "Other" => "Other"
+      } %>
+      <button>Next Step</button><br/>
+    <% end %>
+
+    <%=question "/page/quick_check/have_you_started_trading" do |root,answer| %>
+      <%=error res, :no_answer %>
+      <%=radio_list "answer", answer, res, { 
+        "Yes" => "Yes", 
+        "No" => "No" 
+      } %>
+      <button>Next Step</button><br/>
+    <% end %>
+
+    <%=question "/page/quick_check/claiming_expenses" do |root,answer| %>
+      <%=error res, :no_answer %>
+      <%=radio_list "answer", answer, res, { 
+        "Yes" => "Yes", 
+        "No" => "No" 
+      } %>
+      <button>Next Step</button><br/>
+    <% end %>
+
+
+    <%=question "/page/quick_check/income_over_100000" do |root,answer| %>
+      <p>Add up all your income, including pensions, savings interest and dividends. 
+      Then take off anything you can claim tax relief on, eg payments to pension schemes or allowable expenses.</p>
+      <%=error res, :no_answer %>
+      <%=radio_list "answer", answer, res, { 
+        "Yes" => "Yes", 
+        "No" => "No" 
+      } %>
+      <button>Next Step</button><br/>
+    <% end %>
+
+    <%=question "/page/quick_check/child_benefit" do |root,answer| %>
+      <p>Add up all of the higher-earning partner’s income, eg salary before tax, taxable benefits (eg company car),
+      income from investments or pensions. Then take off payments such as pension contributions that aren’t paid through your salary.</p>
+      <%=error res, :no_answer %>
+      <%=radio_list "answer", answer, res, { 
+        "Yes, and my income is higher then my partner's" => "Yes, and my income is higher then my partner's", 
+        "Yes, and my partner's income is higher" => "Yes, and my partner's income is higher", 
+        "No" => "No" 
+      } %>
+      <button>Next Step</button><br/>
+    <% end %>
+
+    <%=question "/page/quick_check/income_from_uk_property" do |root,answer| %>
+      <%=error res, :no_answer %>
+      <%=radio_list "answer", answer, res, { 
+        "£2,500 to £9,999 after allowable expenses" => "£2,500 to £9,999 after allowable expenses", 
+        "£10,000 or more before allowable expenses" => "£10,000 or more before allowable expenses", 
+        "No" => "No" 
+      } %>
+      <button>Next Step</button><br/>
+    <% end %>
+
+    <%=question "/page/quick_check/income_to_report" do |root,answer| %>
+      <p>You need to report:
+        <li>income that hasn’t been taxed and is £2,500 or more, eg from savings, investments, tips, commission</li>
+        <li>income from savings and investments that has been taxed and was £10,000 or more before you paid tax on it</li>
+      </p>
+      <%=error res, :no_answer %>
+      <%=radio_list "answer", answer, res, { 
+        "Yes" => "Yes", 
+        "No" => "No" 
+      } %>
+      <button>Next Step</button><br/>
+    <% end %>
+
+    <%=question "/page/quick_check/capital_gains_tax" do |root,answer| %>
+      <p>For example, because you’re selling or giving away an asset like shares or a holiday home. 
+      You usually don’t pay Capital Gains Tax when you sell your own home.</p>
+      <%=error res, :no_answer %>
+      <%=radio_list "answer", answer, res, { 
+        "Yes" => "Yes", 
+        "No" => "No" 
+      } %>
+      <button>Next Step</button><br/>
+    <% end %>
+
+    <%=question "/page/quick_check/other" do |root,answer| %>
+      <%=error res, :no_answer %>
+      <%=radio_list "answer", answer, res, { 
+        "You have income from overseas that’s taxable in the UK" => "You have income from overseas that’s taxable in the UK", 
+        "You have lived or worked abroad (check your residency status)" => "You have lived or worked abroad (check your residency status)", 
+        "You’re claiming tax relief under the Enterprise Investment Scheme or Venture Capital Trust relief" => "You’re claiming tax relief under the Enterprise Investment Scheme or Venture Capital Trust relief",
+        "You’re a director of a charity who gets paid benefits" => "You’re a director of a charity who gets paid benefits",
+        "You’re a religious minister" => "You’re a religious minister",
+        "You’re a trustee of a trust or registered pension scheme" => "You’re a trustee of a trust or registered pension scheme",
+        "None of these" => "None of these"
+      } %>
+      <button>Next Step</button><br/>
+    <% end %>
+
+
+  <% end %>
+
+  <% when_answered "/page/quick_check" do %>
+    <% if doop["/page/quick_check/_sa_required"] == true %>
+      <%= action_box do %>
+        <h2 id="sa_required_box" >Based on your answers you have to fill in a Self Assessment tax return</h2>
+        <p>
+        <li><a href="https://www.gov.uk/register-for-self-assessment">Register for Self Assessment</a> if you aren't already registered.</li>
+        <li><a href="https://www.gov.uk/self-assessment-tax-return-deadlines">Check the deadlines</a> for when you have to send your return.</li>
+        <li><a href="https://www.gov.uk/file-your-self-assessment-tax-return">Send you tax return online</a>.
+        </p>
+        <p>You can get <a href="https://www.gov.uk/how-to-send-self-assessment-online">help with sending your return online</a></p>
+
+        <% if doop["/page/quick_check/child_benefit/_enabled"] == true && doop["/page/quick_check/child_benefit/_answer"] == "Yes, and my income is higher then my partner's" %>
+          <br/>
+          <p><strong>You can work out how much High Income Child Benefit tax charge you may have to pay using the <a href="https://www.gov.uk/child-benefit-tax-calculator">Child Benefit tax calculator</a></strong>.</p>
+        <% end %>
+        <br/>
+        <p>You can also contact the <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/self-assessment">Self Assessment helpline</a>.
+      <% end %>
+
+
+    <% end %>
+
+
+    <% if doop["/page/quick_check/_sa_required"] == false && doop["/page/quick_check/child_benefit/_answer"] == "Yes, and my partner's income is higher" && doop["/page/quick_check/child_benefit/_enabled"] == true %>
+
+      <%= action_box do %>
+        <h2>Based on your answers you don't need to fill in a Self Assessment tax return - but your partner does</h2>
+        <p>This is because the person whose income is over £50,000 and the highest in your household has to fill in the return - even if they’re not the one claiming Child Benefit.</p>
+        <p>
+          <li>They need to <a href="https://www.gov.uk/register-for-self-assessment">register for Self Assessment</a> if they aren’t already registered</li>
+          <li><a href="https://www.gov.uk/self-assessment-tax-return-deadlines">Check the deadlines</a> for when they have to send their return.
+          <li><a href="https://www.gov.uk/file-your-self-assessment-tax-return">Send their tax return online</a>.
+        </p>
+      <% end %>
+
+    
+    <% elsif doop["/page/quick_check/_sa_required"] == false %>
+      <%= action_box do %>
+        <h2>Based on your answers you don't need to fill in a Self Assessment tax return</h2>
+        <p> If HM Revenue and Customs has written to you asking you to fill in a tax return, phone the 
+            <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/self-assessment">Self Assessment helpline</a>. 
+            They’ll confirm if you need to file a return or not.  </p>
+        <p>
+        You <a href="https://www.gov.uk/apply-tax-free-interest-on-savings">may still need to pay tax</a> on any income up to £2,499 if you pay Income Tax at the higher or additional rate.
+        </p>
+        <p>You must <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/income-tax-enquiries-for-individuals-pensioners-and-employees">contact HMRC</a> if you’re not paying the extra tax due through your employer or pension provider.</p>
+      <% end %>
+
+    <% end %>
+
+ 
+  <% end %>
+
+<% end %>

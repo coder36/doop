@@ -93,6 +93,8 @@ module Doop
       res[:all_pages] = get_all_pages
       res[:current_question] = @doop.currently_asked
       res[:current_question_id] = question_id res[:current_question]
+      display_nav = @doop[res[:page_path]]["_display_nav"]
+      res[:display_nav] = display_nav == nil ? true : display_nav
       @controller.render "index", :locals => { :res => res, :doop => @doop }
     end
 
@@ -166,5 +168,18 @@ module Doop
     def inject_yaml yaml
       @controller.params["doop_data"] = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base).encrypt_and_sign(yaml)
     end
+
+    def enable_question path, options = {}
+      doop.enable_question path, options
+    end
+
+    def disable_all_questions_after path
+      doop.disable_all_questions_after path
+    end
+
+    def enable_all_questions_after path, options = {}
+      doop.enable_all_questions_after path, options
+    end
+
   end
 end

@@ -1,6 +1,7 @@
 <%=question_form doop, res do %>
   <%=question "/page/about_you" do |root, answer| %>
 
+
     <%=question "/page/about_you/your_name" do |root,answer| %>
       <%=doop_textfield "title", answer, res, :label => "Title (eg. Mrs, Miss, Ms, Mr or Dr)" %>
       <%=doop_textfield "firstname", answer, res, :label => "Firstname" %>
@@ -74,6 +75,16 @@
     <%=question "/page/about_you/nino" do |root,answer| %>
       <%=doop_textfield "answer", answer, res, :label => "Example of a National Insurance number is 00123456A" %>
       <button>Continue</button>
+    <% end %>
+
+    <%=question "/page/about_you/marital_status" do |root,answer| %>
+      <%=error res, :no_answer %>
+      <%=radio_list "answer", answer, res, { 
+        "Married" => "Married", 
+        "Single" => "Single", 
+        "Seperated" => "Seperated" 
+      } %>
+      <button>Continue</button><br/>
     <% end %>
 
     <% when_answered "/page/about_you" do %>

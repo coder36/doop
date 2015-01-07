@@ -8,6 +8,10 @@ module DoopHelper
     render "doop/info_box", :content => block
   end
 
+  def action_box &block
+    render "doop/action_box", :content => block
+  end
+
   def question_visible? path
     doop = request[:doop]
     doop.each_visible_question do |root,p|
@@ -49,7 +53,7 @@ module DoopHelper
       l[m[1]] = path if m != nil
     end
 
-    l.keys.sort.each { |k| block.call( l[k], k.to_i ) }
+    l.keys.sort_by {|i| i.to_i}.each { |k| block.call( l[k], k.to_i ) }
   end
 
   def when_question options = {}, &block
@@ -81,6 +85,10 @@ module DoopHelper
 
   def doop_textfield name, answer, res, options = {}
     s = render "doop/textfield", :answer => answer, :name => name, :res => res, :label => options[:label]
+  end
+
+  def radio_list name, answer, res, hash
+    s = render "doop/radio_list", :hash => hash, :name => name, :answer => answer, :res => res
   end
 
 end
