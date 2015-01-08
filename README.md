@@ -4,6 +4,8 @@ A question framework for govuk sites, inspired by the great work [GDS](https://g
 
 ## Demos
 
+When opening the demos, I suggest right clicking on the link and opening in a new tab.  (Inside the demo, the behaviour of the back button is modified to go back a 'doop' page)
+
 ### [Demo 1](http://blooming-wave-8670.herokuapp.com/demo/index)
 [Demo 1](http://blooming-wave-8670.herokuapp.com/demo/index) is an extensive demo covering most of the features supported by doop.
 
