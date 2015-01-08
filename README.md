@@ -17,7 +17,7 @@ The demos are hosted on heroku so there may be an initial pause while heroku fir
 
 <a href="http://blooming-wave-8670.herokuapp.com/demo/index"><img src="https://raw.githubusercontent.com/coder36/doop/master/notes/screenshots/doop_1.png"/></a>
 
-<a href="http://blooming-wave-8670.herokuapp.com/demo/index"><img src="https://raw.githubusercontent.com/coder36/doop/master/notes/screenshots/doop_2.png"/></
+<a href="http://blooming-wave-8670.herokuapp.com/sasdemo/index"><img src="https://raw.githubusercontent.com/coder36/doop/master/notes/screenshots/doop_2.png"/></a>
 
 # Quick start
 
