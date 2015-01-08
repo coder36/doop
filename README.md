@@ -1,15 +1,23 @@
 # Doop
 
-A question framework for govuk sites, inspired by the great work [GDS](https://gds.blog.gov.uk) have done to standardize the cross government internet presence.  Try out the demo:
+A question framework for govuk sites, inspired by the great work [GDS](https://gds.blog.gov.uk) have done to standardize the cross government internet presence.  Try out the demos:
 
-## [Doopgovuk demo](http://blooming-wave-8670.herokuapp.com/demo/index)
+## Demos
 
-it's hosted on heroku so there may be a initial pause while heroku fires up the dynamo.
+### [Demo 1](http://blooming-wave-8670.herokuapp.com/demo/index)
+[Demo 1](http://blooming-wave-8670.herokuapp.com/demo/index) is an extensive demo covering most of the features supported by doop.
+
+### [Demo 2](http://blooming-wave-8670.herokuapp.com/sasdemo/index)
+[Demo 2](http://blooming-wave-8670.herokuapp.com/sasdemo/index) is based on [this](https://www.gov.uk/check-if-you-need-a-tax-return/y) existing online form to check whether you should complete a self assessment or not.  It took about a day to develop:    [SasdemoController.rb](https://github.com/coder36/doop/blob/master/demo/app/controllers/sasdemo_controller.rb), [_quick_check.html.erb](https://github.com/coder36/doop/blob/master/demo/app/views/sasdemo/_quick_check.html.erb)
+
+
+The demos are hosted on heroku so there may be an initial pause while heroku fires up the dynamo.
+
+## Screenshots
 
 <a href="http://blooming-wave-8670.herokuapp.com/demo/index"><img src="https://raw.githubusercontent.com/coder36/doop/master/notes/screenshots/doop_1.png"/></a>
 
-
-
+<a href="http://blooming-wave-8670.herokuapp.com/demo/index"><img src="https://raw.githubusercontent.com/coder36/doop/master/notes/screenshots/doop_2.png"/></
 
 # Quick start
 
