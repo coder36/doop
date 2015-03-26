@@ -23,7 +23,7 @@ The demos are hosted on heroku so there may be an initial pause while heroku fir
 
 # Quick start
 
-Assuming ruby, rails and nodejs is installed:
+Assuming ruby 1.9.3, rails and nodejs is installed:
 
     $ sudo apt-get install qt4-dev-tools libqt4-dev libqt4-core libqt4-gui xvfb libpq-dev nodejs
 
@@ -69,7 +69,7 @@ If your govuk site requires any kind of questionaire, doop is the answer.
 
 # Usage
 
-## Generator
+## Generator (Tested on ruby 1.9.3)
 
 Make sure that the gemfile contains gem 'doop'.   Then run
 
@@ -350,6 +350,8 @@ Don't forget to deal with database drivers.  In your Gemfile, you will need to u
 
 * Refactor -  make the code, simpler and read better
 * Language localisation
+* Rspec tests only work on ruby 1.9.3
+* Update doop to use (hashie)[https://github.com/intridea/hashie]
 
 
 ## Contributing
